@@ -14,14 +14,13 @@
         "shims.d.ts",
         "enums.d.ts",
         "_locales/zh-cn/pxt-mcar-strings.json"
-
     ],
     "testFiles": [
         "test.ts"
     ],
     "public": true,
     "targetVersions": {
-        "target": "4.0.18",
+        "target": "6.0.28",
         "targetId": "microbit"
     },
     "supportedTargets": [

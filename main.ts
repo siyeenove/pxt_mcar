@@ -43,7 +43,7 @@ enum mCarRGBLight {
     RGBL = 2,
     //%block="right RGB"
     RGBR = 1,
-    //%block="all RGB lights"
+    //%block="all RGB"
     RGBA = 3
 }
 
@@ -100,24 +100,20 @@ enum SonarUnit {
 }
 
 enum mCarIRButtons {
-    //% block="menu"
-    Menu = 2,
-    //% block="up"
-    Up = 5,
-    //% block="left"
-    Left = 8,
-    //% block="right"
-    Right = 10,
-    //% block="down"
-    Down = 13,
-    //% block="ok"
+    //% block="OK"
     OK = 9,
-    //% block="plus"
-    Plus = 4,
-    //% block="minus"
-    Minus = 12,
-    //% block="back"
-    Back = 6,
+    //% block="▲"
+    Up = 5,
+    //% block="◀"
+    Left = 8,
+    //% block="▶"
+    Right = 10,
+    //% block="▼"
+    Down = 13,
+    //% block="*"
+    MUL = 4,
+    //% block="#"
+    PoundSign = 12,
     //% block="0"
     Zero = 14,
     //% block="1"
@@ -144,7 +140,7 @@ let IR_Val = 0
 let leftWheelSpeed = 0
 let rightWheelSpeed = 0
 let threeWayStateValue = 0
-//% weight=100 color=#008C8C block="mCar" blockId="mCar" icon="\uf48b"
+//% weight=10 color=#008C8C block="mCar" blockId="mCar" icon="\uf48b"
 namespace mCar {
     let irstate: number;
     let state: number;
@@ -188,7 +184,7 @@ namespace mCar {
     * Set the speed and direction of the wheels
     */
     //% group="Wheels"
-    //% block="set %wheel speed %speed\\%, %direction"
+    //% block="Set %wheel speed %speed\\% %direction"
     //% speed.min=0 speed.max=100
     //% weight=380
     export function setWheelSpeedDir(wheel: mCarWheels, speed: number, direction: wheelDir): void {
@@ -220,7 +216,7 @@ namespace mCar {
      */
     //% group="Wheels"
     //% weight=370
-    //%block="set %Wheel to stop"
+    //%block="Set %Wheel to stop"
     export function wheelStop(wheel: mCarWheels): void {
         let i2cBuffer = pins.createBuffer(2)
 
@@ -244,7 +240,7 @@ namespace mCar {
      */
     //% group="Wheels"
     //% weight=360
-    //%block="Wheels speed offset: %offset1, %offset2, %offset3"
+    //%block="Wheels speed offset: Speed30 %offset1 Speed60 %offset2 Speed90 %offset3"
     //% offset1.min=-10 offset1.max=10
     //% offset2.min=-10 offset2.max=10
     //% offset3.min=-10 offset3.max=10
@@ -278,7 +274,7 @@ namespace mCar {
      */
     //% group="Car"
     //% weight=340
-    //%block="Car go %direction, speed: %speed\\%"
+    //%block="Car go %direction Speed %speed\\%"
     //% speed.min=0 speed.max=100
     export function carDir(direction : mCarDir, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
@@ -311,7 +307,7 @@ namespace mCar {
      */
     //% group="Car"
     //% weight=320
-    //%block="Car turn %direction, turn rate: %percent\\%, speed: %speed\\%"
+    //%block="Car turn %direction Turn rate %percent\\% Speed %speed\\%"
     //% percent.min=0 r.max=100
     //% speed.min=0 speed.max=100
     export function carTurn(direction: mCarTurn, percent: number, speed: number): void {
@@ -345,7 +341,7 @@ namespace mCar {
      */
     //% group="Car"
     //% weight=320
-    //%block="Car turn %direction at place, speed: %speed//%"
+    //%block="Car turn %direction at place Speed %speed\\%"
     //% speed.min=0 speed.max=100
     export function carTurnPlace(direction : mCarTurn, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
@@ -398,7 +394,7 @@ namespace mCar {
     * set LED headlights.
     */
     //% group="RGB LED headlights"
-    //% block="set RGB LED headlights %mCarRGBLight color to $color"
+    //% block="Set %mCarRGBLight LED headlights color: $color"
     //% color.shadow="colorNumberPicker"
     //% weight=300
     export function rgbLight(light: mCarRGBLight, color: number) {
@@ -427,7 +423,7 @@ namespace mCar {
     */
     //% group="RGB LED headlights"
     //% inlineInputMode=inline
-    //% blockId=RGB block="set RGB LED headlights %mCarRGBLight color to R:%r G:%g B:%b"
+    //% blockId=RGB block="Set %mCarRGBLight LED headlights color: R %r G %g B %b"
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
@@ -479,7 +475,7 @@ namespace mCar {
     */
     //% group="Tracking sensor"
     //% weight=270
-    //% block="Get the status value of the 3-way line sensor"
+    //% block="Get the status value of the tracking sensor"
     export function trackbitStateValue() {
         let channel1 = 0, channel2 = 0, channel3 = 0;
 
@@ -495,7 +491,7 @@ namespace mCar {
     */
     //% group="Tracking sensor"
     //% weight=260
-    //%block="tracking sensor state is %TrackbitStateType"
+    //%block="Tracking sensor state is %TrackbitStateType"
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
         return threeWayStateValue == state
     }
@@ -505,7 +501,7 @@ namespace mCar {
     */
     //% group="Tracking sensor"
     //% weight=240
-    //% block="channel %TrackbitChannel tracking sensor %TrackbitType"
+    //% block="Channel %TrackbitChannel tracking sensor %TrackbitType"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (state == TrackbitType.State_1)
             if (threeWayStateValue & (1 << (channel - 1))) {
@@ -530,7 +526,7 @@ namespace mCar {
       * @param Sonarunit two states of ultrasonic module, eg: Centimeters
       */
     //% group="Sonar sensor"
-    //% blockId=ultrasonic block="sonar sensor unit %SonarUnit"
+    //% blockId=ultrasonic block="Sonar sensor unit %SonarUnit"
     //% weight=220
     export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
         // send pulse
@@ -560,7 +556,7 @@ namespace mCar {
 
     //% group="Infrared sensor"
     //% weight=160
-    //% block="on IR receiving"
+    //% block="On IR receiving"
     export function irCallback(handler: () => void) {
         pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
         control.onEvent(98, 3500, handler)
@@ -591,7 +587,7 @@ namespace mCar {
      */
     //% group="Expansion port"
     //% weight=120
-    //% block="set %ServoType servo %mCarServoIndex angel to %angle°"
+    //% block="Set %ServoType servo %mCarServoIndex angel to %angle°"
     export function extendServoControl(servotype: ServoType, index: mCarServoIndex, angle: number): void {
         let angleMap: number
         if (servotype == ServoType.Servo90) {
@@ -623,7 +619,7 @@ namespace mCar {
      */
     //% group="Expansion port"
     //% weight=110
-    //% block="set continuous servo %mCarServoIndex speed to %speed\\%"
+    //% block="Set continuous servo %mCarServoIndex speed to %speed\\%"
     //% speed.min=-100 speed.max=100
     export function continuousServoControl(index: mCarServoIndex, speed: number): void {
         speed = Math.map(speed, -100, 100, 0, 180)
@@ -652,7 +648,7 @@ namespace mCar {
     */
     //% group="Others"
     //% weight=1
-    //% block="version number"
+    //% block="Version number"
     export function readVersions(): string {
         let mCarVersions: number = 0;
 
