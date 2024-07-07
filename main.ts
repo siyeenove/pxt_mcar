@@ -136,6 +136,13 @@ enum mCarIRButtons {
     Nine = 26
 }
 
+enum batteryType {
+    //% block="AA"
+    AA = 1,
+    //% block="Lithium"
+    LithiumBattery
+}
+
 let IR_Val = 0
 let leftWheelSpeed = 0
 let rightWheelSpeed = 0
@@ -173,8 +180,9 @@ namespace mCar {
     * Type: 1=90servo; 2=180servo; 3=360servo
     * Degree: 0-360
     * 
-    * Read battery level command: 0x2f + w + DeviceNumber + 0x2f + R 
+    * Read battery level command: 0x2f + w + DeviceNumber + batType + 0x2f + R 
     * DeviceNumber: 10=battery
+    * batType: 1 = AA battery, 2 = Lithium battery
     * Return: 0-100 map 0-100%
     */
     let i2cAddr: number = 0x2F;
@@ -632,10 +640,14 @@ namespace mCar {
     */
     //% group="Battery"
     //% weight=100
-    //% block="Read the battery level"
-    export function batteryLevel() : number {
-        let i2cBuffer = pins.createBuffer(1);
+    //% block="Read %batType battery level"
+    export function batteryLevel(batType: batteryType) : number {
+        let i2cBuffer = pins.createBuffer(2);
         i2cBuffer[0] = 0x0A;
+        if (batType == batteryType.AA)
+            i2cBuffer[1] = 1;
+        else if (batType == batteryType.LithiumBattery)
+            i2cBuffer[1] = 2;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
 
         let batLevel = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false);
