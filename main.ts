@@ -9,9 +9,9 @@ enum mCarWheels {
 }
 
 enum wheelDir {
-    //%block="clockwise"
+    //%block="forward"
     CW = 1,
-    //%block="counterclockwise"
+    //%block="backward"
     CCW = 2,
 }
 
@@ -154,38 +154,9 @@ namespace mCar {
 
     /*
     * 
-    * The I2C speed is 100Khz, and the slave address is 0x2f
-    * The PWM frequency between the motor and the LED is about 200Hz
-    *
-    * Read the chip firmware version command: 0x2f + w + DeviceNumber + 0x2f + R 
-    * DeviceNumber: 0=firmware version
-    * Return: 0-255
-    * 
-    * Calibrate motor speed command: 0x2f + w + DeviceNumber + Speed + Offset
-    * DeviceNumber: 1=LeftMotor, 2=RightMotor
-    * Speed: 30, 60, 90
-    * Offset: 0-20, 0-10 map 0-10, 11-20 map -1 - -10
-    * 
-    * Set the motor speed command: 0x2f + w + DeviceNumber + Speed
-    * DeviceNumber: 3=LeftMotor, 4=RightMotor
-    * Speed: 0--100, motor reverse speed, from small to large; 
-    *       101--201, motor forward speed, from small to large (mapped to 0-100)
-    * 
-    * Set LED brightness command: 0x2f + w + DeviceNumber + RData + GData + BData 
-    * DeviceNumber: 5=LeftRgbLed, 6=RightRgbLed
-    * RData: 0-255; GData: 0-255; BData: 0-255
-    * 
-    * Set the servo motor command: 0x2f + w + DeviceNumber + + Type + Degree 
-    * DeviceNumber: 7=ServoS1, 8=ServoS2, 9=ServoS3
-    * Type: 1=90servo; 2=180servo; 3=360servo
-    * Degree: 0-360
-    * 
-    * Read battery level command: 0x2f + w + DeviceNumber + batType + 0x2f + R 
-    * DeviceNumber: 10=battery
-    * batType: 1 = AA battery, 2 = Lithium battery
-    * Return: 0-100 map 0-100%
+    * The I2C speed is 100Khz, and the slave address is 0x2a
     */
-    let i2cAddr: number = 0x2F;
+    let i2cAddr: number = 0x2a;
 
 
     /**
@@ -200,16 +171,16 @@ namespace mCar {
         
         if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
             leftWheelSpeed = speed;
-            i2cBuffer[0] = 0x03;
+            i2cBuffer[0] = 0x05;
             if(direction == wheelDir.CW)
-                i2cBuffer[1] = leftWheelSpeed;
-            else if (direction == wheelDir.CCW)
                 i2cBuffer[1] = leftWheelSpeed + 101;
+            else if (direction == wheelDir.CCW)
+                i2cBuffer[1] = leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
         }
         if (wheel == mCarWheels.RightWheel || wheel == mCarWheels.AllWheel) {
             rightWheelSpeed = speed;
-            i2cBuffer[0] = 0x04;
+            i2cBuffer[0] = 0x06;
             if(direction == wheelDir.CW)
                 i2cBuffer[1] = rightWheelSpeed;
             else if (direction == wheelDir.CCW)
@@ -230,13 +201,13 @@ namespace mCar {
 
         if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
             leftWheelSpeed = 0;
-            i2cBuffer[0] = 0x03;
+            i2cBuffer[0] = 0x05;
             i2cBuffer[1] = leftWheelSpeed; 
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
         if (wheel == mCarWheels.RightWheel || wheel == mCarWheels.AllWheel) {
             rightWheelSpeed = 0;
-            i2cBuffer[0] = 0x04;
+            i2cBuffer[0] = 0x06;
             i2cBuffer[1] = rightWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
@@ -248,32 +219,23 @@ namespace mCar {
      */
     //% group="Wheels"
     //% weight=360
-    //%block="Wheels speed offset: Speed30 %offset1 Speed60 %offset2 Speed90 %offset3"
-    //% offset1.min=-10 offset1.max=10
-    //% offset2.min=-10 offset2.max=10
-    //% offset3.min=-10 offset3.max=10
-    export function wheelsAdjustment(offset1: number, offset2: number, offset3: number): void {
-        let buffer = pins.createBuffer(3)
-        
-        buffer[0] = 0x01;
-        buffer[1] = 30;
-        buffer[2] = offset1 > 0 ? offset1 : 10 - offset1;
-        pins.i2cWriteBuffer(i2cAddr, buffer)
-        basic.pause(1000);
-        
-        buffer[0] = 0x01;
-        buffer[1] = 60;
-        buffer[2] = offset2 > 0 ? offset2 : 10 - offset2;
-        pins.i2cWriteBuffer(i2cAddr, buffer)
-        basic.pause(1000);
-        
-        buffer[0] = 0x01;
-        buffer[1] = 90;
-        buffer[2] = offset3 > 0 ? offset3 : 10 - offset3;
-        pins.i2cWriteBuffer(i2cAddr, buffer)
-        basic.pause(1000);
+    //%block="Wheels speed offset: left wheel %offset1 right wheel %offset2"
+    //% offset1.min=-10 offset1.max=0
+    //% offset2.min=-10 offset2.max=0
+    export function wheelsAdjustment(offset1: number, offset2: number): void {
+        let buffer = pins.createBuffer(2)
+        offset1 = Math.map(offset1, -10, 0, 10, 0);
+        offset2 = Math.map(offset2, -10, 0, 10, 0);
 
-        wheelStop(mCarWheels.AllWheel);
+        buffer[0] = 0x03;
+        buffer[1] = offset1;
+        pins.i2cWriteBuffer(i2cAddr, buffer)
+        basic.pause(10);
+        
+        buffer[0] = 0x04;
+        buffer[1] = offset2;
+        pins.i2cWriteBuffer(i2cAddr, buffer)
+        basic.pause(10);
     }
 
 
@@ -290,20 +252,20 @@ namespace mCar {
         rightWheelSpeed = speed;
 
         if (direction == mCarDir.FW) {
-            i2cBuffer[0] = 0x03;
-            i2cBuffer[1] = leftWheelSpeed;
+            i2cBuffer[0] = 0x05;
+            i2cBuffer[1] = leftWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
 
-            i2cBuffer[0] = 0x04;
+            i2cBuffer[0] = 0x06;
             i2cBuffer[1] = rightWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
         else if (direction == mCarDir.BW) {
-            i2cBuffer[0] = 0x03;
-            i2cBuffer[1] = leftWheelSpeed + 101;
+            i2cBuffer[0] = 0x05;
+            i2cBuffer[1] = leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
     
-            i2cBuffer[0] = 0x04;
+            i2cBuffer[0] = 0x06;
             i2cBuffer[1] = rightWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
@@ -324,21 +286,21 @@ namespace mCar {
         rightWheelSpeed = speed;
     
         if (direction == mCarTurn.Left) {
-            i2cBuffer[0] = 0x03;
-            i2cBuffer[1] = leftWheelSpeed - (leftWheelSpeed*(percent/100));
+            i2cBuffer[0] = 0x05;
+            i2cBuffer[1] = 101 + leftWheelSpeed - (leftWheelSpeed*(percent/100));
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
 
-            i2cBuffer[0] = 0x04;
+            i2cBuffer[0] = 0x06;
             i2cBuffer[1] = rightWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
         else if (direction == mCarTurn.Right) {
-            i2cBuffer[0] = 0x03;
-            i2cBuffer[1] = leftWheelSpeed;
+            i2cBuffer[0] = 0x05;
+            i2cBuffer[1] = 101 + leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
     
-            i2cBuffer[0] = 0x04;
-            i2cBuffer[1] = rightWheelSpeed - (rightWheelSpeed*(rightWheelSpeed/100));
+            i2cBuffer[0] = 0x06;
+            i2cBuffer[1] = rightWheelSpeed - (rightWheelSpeed*(percent/100));
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
     }
@@ -357,21 +319,21 @@ namespace mCar {
         rightWheelSpeed = speed;
 
         if (direction == mCarTurn.Left) {
-            i2cBuffer[0] = 0x03;
+            i2cBuffer[0] = 0x05;
             i2cBuffer[1] = leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
 
-            i2cBuffer[0] = 0x04;
-            i2cBuffer[1] = rightWheelSpeed + 101;
+            i2cBuffer[0] = 0x06;
+            i2cBuffer[1] = rightWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
         else if (direction == mCarTurn.Right) {
-            i2cBuffer[0] = 0x03;
+            i2cBuffer[0] = 0x05;
             i2cBuffer[1] = leftWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
     
-            i2cBuffer[0] = 0x04;
-            i2cBuffer[1] = rightWheelSpeed;
+            i2cBuffer[0] = 0x06;
+            i2cBuffer[1] = rightWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
     }
@@ -388,11 +350,11 @@ namespace mCar {
         leftWheelSpeed = 0;
         rightWheelSpeed = 0;
 
-        i2cBuffer[0] = 0x03;
+        i2cBuffer[0] = 0x05;
         i2cBuffer[1] = leftWheelSpeed;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
 
-        i2cBuffer[0] = 0x04;
+        i2cBuffer[0] = 0x06;
         i2cBuffer[1] = rightWheelSpeed;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
     }
@@ -407,19 +369,33 @@ namespace mCar {
     //% weight=300
     export function rgbLight(light: mCarRGBLight, color: number) {
         let r: number, g: number, b: number = 0
-        let buf = pins.createBuffer(4)
+        let buf = pins.createBuffer(2)
         r = color >> 16
         g = (color >> 8) & 0xFF
         b = color & 0xFF
 
-        if(light == mCarRGBLight.RGBL)
-            buf[0] = 0x05;
-        if(light == mCarRGBLight.RGBR)
-            buf[0] = 0x06;
-        buf[1] = r;
-        buf[2] = g;
-        buf[3] = b;
-        pins.i2cWriteBuffer(i2cAddr, buf)
+        if(light == mCarRGBLight.RGBL){
+            buf[0] = 0x07;
+            buf[1] = r;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x08;
+            buf[1] = g;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x09;
+            buf[1] = b;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+        }
+        if (light == mCarRGBLight.RGBR) {
+            buf[0] = 0x0a;
+            buf[1] = r;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x0b;
+            buf[1] = g;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x0c;
+            buf[1] = b;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+        }
     }
 
 
@@ -437,20 +413,28 @@ namespace mCar {
     //% b.min=0 b.max=255
     //% weight=290
     export function singleHeadlights(light: mCarRGBLight, r: number, g: number, b: number): void {
-        let buf = pins.createBuffer(4);
+        let buf = pins.createBuffer(2);
         if (light == mCarRGBLight.RGBL || light == mCarRGBLight.RGBA) {
-            buf[0] = 0x05;
+            buf[0] = 0x07;
             buf[1] = r;
-            buf[2] = g;
-            buf[3] = b;
-            pins.i2cWriteBuffer(i2cAddr, buf);
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x08;
+            buf[1] = g;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x09;
+            buf[1] = b;
+            pins.i2cWriteBuffer(i2cAddr, buf)
         }
         if (light == mCarRGBLight.RGBR || light == mCarRGBLight.RGBA) {
-            buf[0] = 0x06;
+            buf[0] = 0x0a;
             buf[1] = r;
-            buf[2] = g;
-            buf[3] = b;
-            pins.i2cWriteBuffer(i2cAddr, buf);
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x0b;
+            buf[1] = g;
+            pins.i2cWriteBuffer(i2cAddr, buf)
+            buf[0] = 0x0c;
+            buf[1] = b;
+            pins.i2cWriteBuffer(i2cAddr, buf)
         } 
     }
 
@@ -462,19 +446,27 @@ namespace mCar {
     //% block="Turn off all RGB LED headlights"
     //% weight=280
     export function turnOffAllHeadlights(): void {
-        let buf = pins.createBuffer(4);
+        let buf = pins.createBuffer(2);
 
-        buf[0] = 0x05;
+        buf[0] = 0x07;
         buf[1] = 0;
-        buf[2] = 0;
-        buf[3] = 0;
-        pins.i2cWriteBuffer(i2cAddr, buf);
+        pins.i2cWriteBuffer(i2cAddr, buf)
+        buf[0] = 0x08;
+        buf[1] = 0;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+        buf[0] = 0x09;
+        buf[1] = 0;
+        pins.i2cWriteBuffer(i2cAddr, buf)
 
-        buf[0] = 0x06;
+        buf[0] = 0x0a;
         buf[1] = 0;
-        buf[2] = 0;
-        buf[3] = 0;
-        pins.i2cWriteBuffer(i2cAddr, buf);
+        pins.i2cWriteBuffer(i2cAddr, buf)
+        buf[0] = 0x0b;
+        buf[1] = 0;
+        pins.i2cWriteBuffer(i2cAddr, buf)
+        buf[0] = 0x0c;
+        buf[1] = 0;
+        pins.i2cWriteBuffer(i2cAddr, buf)
     }
 
 
@@ -599,26 +591,25 @@ namespace mCar {
     export function extendServoControl(servotype: ServoType, index: mCarServoIndex, angle: number): void {
         let angleMap: number
         if (servotype == ServoType.Servo90) {
-            angleMap = Math.map(angle, 0, 90, 0, 180);
+            angleMap = Math.map(angle, 0, 90, 50, 200);
         }
 
         if (servotype == ServoType.Servo180) {
-            angleMap = Math.map(angle, 0, 180, 0, 180);
+            angleMap = Math.map(angle, 0, 180, 50, 200);
         }
 
         if (servotype == ServoType.Servo270) {
-            angleMap = Math.map(angle, 0, 270, 0, 180);
+            angleMap = Math.map(angle, 0, 270, 50, 200);
         }
 
-        let buf = pins.createBuffer(3)
+        let buf = pins.createBuffer(2)
         if(index == mCarServoIndex.S1)
-            buf[0] = 0x07;
+            buf[0] = 0x0d;
         else if (index == mCarServoIndex.S2)
-            buf[0] = 0x08;
+            buf[0] = 0x0e;
         else if (index == mCarServoIndex.S3)
-            buf[0] = 0x09;
-        buf[1] = servotype;
-        buf[2] = angle;
+            buf[0] = 0x0f;
+        buf[1] = angleMap;
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
 
@@ -642,12 +633,11 @@ namespace mCar {
     //% weight=100
     //% block="Read %batType battery level"
     export function batteryLevel(batType: batteryType) : number {
-        let i2cBuffer = pins.createBuffer(2);
-        i2cBuffer[0] = 0x0A;
+        let i2cBuffer = pins.createBuffer(1);
         if (batType == batteryType.AA)
-            i2cBuffer[1] = 1;
+            i2cBuffer[0] = 0x01;
         else if (batType == batteryType.LithiumBattery)
-            i2cBuffer[1] = 2;
+            i2cBuffer[0] = 0x02;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
 
         let batLevel = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false);
