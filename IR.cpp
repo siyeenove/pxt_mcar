@@ -2,7 +2,7 @@
 
 //% color=50 weight=80
 //% icon="\uf1eb"
-namespace IRV2 { 
+namespace IRV1 { 
 int ir_code = 0x00;
 int ir_addr = 0x00;
 int data;
@@ -21,7 +21,7 @@ int logic_value(){//判断逻辑值"0"和"1"子函数
             return 1;
        }
     }
-uBit.serial.printf("error\r\n");
+    //uBit.serial.printf("error\r\n");
     return -1;
 }
 
@@ -82,7 +82,7 @@ void remote_decode(void){
     }
 }
 
- //% 
+//% 
 int irCode(){
     remote_decode();
     return data;

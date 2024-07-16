@@ -99,41 +99,49 @@ enum SonarUnit {
     Inches
 }
 
-enum mCarIRButtons {
-    //% block="OK"
-    OK = 9,
-    //% block="▲"
-    Up = 5,
-    //% block="◀"
-    Left = 8,
-    //% block="▶"
-    Right = 10,
-    //% block="▼"
-    Down = 13,
-    //% block="*"
-    MUL = 4,
-    //% block="#"
-    PoundSign = 12,
-    //% block="0"
-    Zero = 14,
+const enum mCarIRButtons {
     //% block="1"
-    One = 16,
+    Number_1 = 0x68,
     //% block="2"
-    Two = 17,
+    Number_2 = 0x98,
     //% block="3"
-    Three = 18,
+    Number_3 = 0xb0,
     //% block="4"
-    Four = 20,
+    Number_4 = 0x30,
     //% block="5"
-    Five = 21,
+    Number_5 = 0x18,
     //% block="6"
-    Six = 22,
+    Number_6 = 0x7a,
     //% block="7"
-    Seven = 24,
+    Number_7 = 0x10,
     //% block="8"
-    Eight = 25,
+    Number_8 = 0x38,
     //% block="9"
-    Nine = 26
+    Number_9 = 0x5a,
+    //% block="*"
+    Star = 0x42,
+    //% block="0"
+    Number_0 = 0x4a,
+    //% block="#"
+    Hash = 0x52,
+    //% block=" "
+    Unused_1 = -1,
+    //% block="▲"
+    Up = 0x62,
+    //% block=" "
+    Unused_2 = -2,
+    //% block="◀"
+    Left = 0x22,
+    //% block="OK"
+    OK = 0x02,
+    //% block="▶"
+    Right = 0xc2,
+    //% block=" "
+    Unused_3 = -3,
+    //% block="▼"
+    Down = 0xa8,
+    //% block=" "
+    Unused_4 = -4,
 }
 
 enum batteryType {
@@ -549,7 +557,7 @@ namespace mCar {
     }
 
 
-    //% shim=IRV2::irCode
+    //% shim=IRV1::irCode
     function irCode(): number {
         return 0;
     }
@@ -557,14 +565,14 @@ namespace mCar {
     //% group="Infrared sensor"
     //% weight=160
     //% block="On IR receiving"
-    export function irCallback(handler: () => void) {
+    export function irCallback(handler: () => void) {  //handler是irCallback函数的函数型参数，也是irCallback函数生成语块里面要执行的语块。
         pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
-        control.onEvent(98, 3500, handler)
+        control.onEvent(98, 3500, handler)             //注册一个触发事件，handler为触发事件要执行的函数。
         control.inBackground(() => {
             while (true) {
                 IR_Val = irCode()
                 if (IR_Val != 0xff00) {
-                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire)
+                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire) //触发上面注册的事件（control.onEvent（））
                 }
                 basic.pause(20)
             }
@@ -572,15 +580,28 @@ namespace mCar {
     }
 
     /**
+     * Rget IR value
+     */
+    //% blockId=infrared_button
+    //% group="Infrared sensor"
+    //% irButton.fieldEditor="gridpicker"
+    //% irButton.fieldOptions.columns=3
+    //% irButton.fieldOptions.tooltips="false"
+    //% block="IR button %irButton is pressed"
+    //% weight=151
+    export function irButton(irButton: mCarIRButtons): boolean {
+        return (IR_Val & 0x00ff) == irButton as number
+    }
+
+    /**
      * get IR value
      */
     //% group="Infrared sensor"
-    //% block="IR button %mCarIRButtons is pressed"
+    //% block="IR value"
     //% weight=150
-    export function irButton(Button: mCarIRButtons): boolean {
-        return (IR_Val & 0x00ff) == Button
+    export function irValue(): number {
+        return IR_Val & 0x00ff;
     }
-
 
     /**
      * servo control module
