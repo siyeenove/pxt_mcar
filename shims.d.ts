@@ -4,7 +4,7 @@
 
     //% color=50 weight=80
     //% icon="\uf1eb"
-declare namespace IRV2 {
+declare namespace IRV1 {
 }
 
 // Auto-generated. Do not edit. Really.
