@@ -49,23 +49,23 @@ enum mCarRGBLight {
 
 enum TrackbitStateType {
     //% block="◌ ◌ ◌" 
-    Tracking_State_0 = 0,
+    Tracking_State_0 = 7,
     //% block="◌ ◌ ●" 
-    Tracking_State_1 = 1,
+    Tracking_State_1 = 6,
     //% block="◌ ● ◌" 
-    Tracking_State_2 = 2,
+    Tracking_State_2 = 5,
     //% block="◌ ● ●" 
-    Tracking_State_3 = 3,
+    Tracking_State_3 = 4,
 
 
     //% block="● ◌ ◌" 
-    Tracking_State_4 = 4,
+    Tracking_State_4 = 3,
     //% block="● ◌ ●" 
-    Tracking_State_5 = 5,
+    Tracking_State_5 = 2,
     //% block="● ● ◌" 
-    Tracking_State_6 = 6,
+    Tracking_State_6 = 1,
     //% block="● ● ●" 
-    Tracking_State_7 = 7,
+    Tracking_State_7 = 0,
 }
 
 enum TrackbitType {
@@ -101,45 +101,45 @@ enum SonarUnit {
 
 const enum mCarIRButtons {
     //% block="1"
-    Number_1 = 0x68,
+    Number_1 = 0x45,
     //% block="2"
-    Number_2 = 0x98,
+    Number_2 = 0x46,
     //% block="3"
-    Number_3 = 0xb0,
+    Number_3 = 0x47,
     //% block="4"
-    Number_4 = 0x30,
+    Number_4 = 0x44,
     //% block="5"
-    Number_5 = 0x18,
+    Number_5 = 0x40,
     //% block="6"
-    Number_6 = 0x7a,
+    Number_6 = 0x43,
     //% block="7"
-    Number_7 = 0x10,
+    Number_7 = 0x07,
     //% block="8"
-    Number_8 = 0x38,
+    Number_8 = 0x15,
     //% block="9"
-    Number_9 = 0x5a,
+    Number_9 = 0x09,
     //% block="*"
-    Star = 0x42,
+    Star = 0x16,
     //% block="0"
-    Number_0 = 0x4a,
+    Number_0 = 0x19,
     //% block="#"
-    Hash = 0x52,
+    Hash = 0x0d,
     //% block=" "
     Unused_1 = -1,
     //% block="▲"
-    Up = 0x62,
+    Up = 0x18,
     //% block=" "
     Unused_2 = -2,
     //% block="◀"
-    Left = 0x22,
+    Left = 0x08,
     //% block="OK"
-    OK = 0x02,
+    OK = 0x1c,
     //% block="▶"
-    Right = 0xc2,
+    Right = 0x5a,
     //% block=" "
     Unused_3 = -3,
     //% block="▼"
-    Down = 0xa8,
+    Down = 0x52,
     //% block=" "
     Unused_4 = -4,
 }
