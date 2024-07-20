@@ -1,4 +1,7 @@
-
+/*
+* This extension library was developed by the SIYEENOVE team and is only available for SIYEENOVE products.
+* Date: July 20, 2024  
+*/
 enum mCarWheels {
     //%block="left wheel"
     LeftWheel = 1,
@@ -223,7 +226,9 @@ namespace mCar {
 
 
     /*
-     * Wheels speed calibration
+     * Wheels speed calibration.
+     * When the speed of the left and right wheels of the mCar trolley is not consistent,
+     * this function can adjust the speed of the wheel and save it permanently.
      */
     //% group="Wheels"
     //% weight=360
@@ -286,7 +291,7 @@ namespace mCar {
     //% group="Car"
     //% weight=320
     //%block="Car turn %direction Turn rate %percent\\% Speed %speed\\%"
-    //% percent.min=0 r.max=100
+    //% percent.min=0 percent.max=100
     //% speed.min=0 speed.max=100
     export function carTurn(direction: mCarTurn, percent: number, speed: number): void {
         let i2cBuffer = pins.createBuffer(2);
@@ -580,7 +585,7 @@ namespace mCar {
     }
 
     /**
-     * Rget IR value
+     * Select the value of the infrared key that you want to be pressed.
      */
     //% blockId=infrared_button
     //% group="Infrared sensor"
@@ -594,7 +599,9 @@ namespace mCar {
     }
 
     /**
-     * get IR value
+     * Get IR value.
+     * The correct infrared key value can only be read
+     * when the infrared key value is not equal to 0 by logical judgment.
      */
     //% group="Infrared sensor"
     //% block="IR value"

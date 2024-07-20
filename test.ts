@@ -5,63 +5,52 @@ mCar.irCallback(function () {
     if (mCar.irButton(mCarIRButtons.Down)) {
         mCar.carDir(mCarDir.BW, 100)
     }
+    if (mCar.irButton(mCarIRButtons.Left)) {
+        mCar.carTurn(mCarTurn.Left, 50, 100)
+    }
+    if (mCar.irButton(mCarIRButtons.Right)) {
+        mCar.carTurn(mCarTurn.Right, 50, 100)
+    }
     if (mCar.irButton(mCarIRButtons.OK)) {
         mCar.carStop()
     }
-})
-// tests go here; this will not be compiled when this package is used as an extension.
-input.onButtonPressed(Button.A, function () {
-    i += 1
-    if (i == 1) {
-        mCar.rgbLight(mCarRGBLight.RGBA, 0xff0000)
-    }
-    if (i == 2) {
-        mCar.rgbLight(mCarRGBLight.RGBA, 0x00ff00)
-    }
-    if (i == 3) {
-        mCar.rgbLight(mCarRGBLight.RGBA, 0x0000ff)
-        i = 0
-    }
-})
-input.onButtonPressed(Button.B, function () {
-    j += 1
-    if (j == 1) {
-        pins.digitalWritePin(DigitalPin.P0, 1)
-        pins.digitalWritePin(DigitalPin.P1, 0)
-        pins.digitalWritePin(DigitalPin.P2, 0)
-    }
-    if (j == 2) {
-        pins.digitalWritePin(DigitalPin.P0, 0)
-        pins.digitalWritePin(DigitalPin.P1, 1)
-        pins.digitalWritePin(DigitalPin.P2, 0)
-    }
-    if (j == 3) {
-        pins.digitalWritePin(DigitalPin.P0, 0)
-        pins.digitalWritePin(DigitalPin.P1, 0)
-        pins.digitalWritePin(DigitalPin.P2, 1)
-        j = 0
-    }
-})
-let j = 0
-let i = 0
-let k = 0
-music.setBuiltInSpeakerEnabled(false)
-basic.pause(100)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S1, 0)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S2, 0)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S3, 0)
-basic.pause(500)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S1, 180)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S2, 180)
-mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S3, 180)
-basic.pause(500)
 
-k = 0
-i = 0
-j = 0
-music.playTone(262, music.beat(BeatFraction.Half))
+    // The correct infrared key value can only be read 
+    // when the infrared key value is not equal to 0 by logical judgment.
+    //if (mCar.irValue() != 0) {
+    //    basic.showNumber(mCar.irValue())
+    //}
+})
+
+// When the speed of the left and right wheels of the mCar trolley is not consistent, 
+// this function can adjust the speed of the wheel and save it permanently.
+mCar.wheelsAdjustment(0, 0)
+
+basic.pause(1000)
+mCar.setWheelSpeedDir(mCarWheels.AllWheel, 0, wheelDir.CW)
+basic.pause(1000)
+mCar.setWheelSpeedDir(mCarWheels.AllWheel, 0, wheelDir.CCW)
+basic.pause(1000)
+mCar.wheelStop(mCarWheels.LeftWheel)
+mCar.singleHeadlights(mCarRGBLight.RGBA, 255, 255, 255)
+basic.showNumber(mCar.batteryLevel(batteryType.AA))
+basic.pause(1000)
+basic.showString(mCar.readVersions())
+basic.pause(1000)
+let strip = neopixel.create(DigitalPin.P8, 2, NeoPixelMode.RGB)
+strip.showColor(neopixel.colors(NeoPixelColors.Orange))
 basic.forever(function () {
-    if (mCar.ultrasonic(SonarUnit.Centimeters) <= 5) {
-        mCar.carStop()
+    mCar.trackbitStateValue()
+    if (mCar.getGrayscaleSensorState(TrackbitStateType.Tracking_State_0)) {
+        basic.showIcon(IconNames.No)
+        basic.pause(1000)
     }
+    mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S1, 0)
+    if (mCar.getGrayscaleSensorState(TrackbitStateType.Tracking_State_7)) {
+        basic.showIcon(IconNames.Yes)
+        basic.pause(1000)
+    }
+    basic.showNumber(mCar.ultrasonic(SonarUnit.Centimeters))
+    basic.pause(1000)
+    mCar.extendServoControl(ServoType.Servo180, mCarServoIndex.S1, 180)
 })
