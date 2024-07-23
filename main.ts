@@ -78,12 +78,12 @@ enum TrackbitType {
     State_1 = 1
 }
 enum TrackbitChannel {
-    //% block="1"
-    One = 1,
-    //% block="2"
-    Two = 2,
-    //% block="3"
+    //% block="Left"
     Three = 3,
+    //% block="Centre"
+    Two = 2,
+    //% block="Right"
+    One = 1
 }
 
 enum ServoType {
@@ -514,7 +514,7 @@ namespace mCar {
     */
     //% group="Tracking sensor"
     //% weight=240
-    //% block="Channel %TrackbitChannel tracking sensor %TrackbitType"
+    //% block="%TrackbitChannel tracking sensor state is %TrackbitType"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (state == TrackbitType.State_1)
             if (threeWayStateValue & (1 << (channel - 1))) {
