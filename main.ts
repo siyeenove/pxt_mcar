@@ -174,10 +174,10 @@ namespace mCar {
     * Set the speed and direction of the wheels
     */
     //% group="Wheels"
-    //% block="Set %wheel speed %speed\\% %direction"
+    //% block="Set %wheel %direction speed %speed\\%"
     //% speed.min=0 speed.max=100
     //% weight=380
-    export function setWheelSpeedDir(wheel: mCarWheels, speed: number, direction: wheelDir): void {
+    export function setWheelSpeedDir(wheel: mCarWheels, direction: wheelDir, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
         
         if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
