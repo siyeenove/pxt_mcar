@@ -13,9 +13,9 @@ enum mCarWheels {
 
 enum wheelDir {
     //%block="forward"
-    CW = 1,
+    FW = 1,
     //%block="backward"
-    CCW = 2,
+    BW = 2,
 }
 
 enum mCarDir {
@@ -177,27 +177,60 @@ namespace mCar {
     //% block="Set %wheel %direction speed %speed\\%"
     //% speed.min=0 speed.max=100
     //% weight=380
-    export function setWheelSpeedDir(wheel: mCarWheels, direction: wheelDir, speed: number): void {
+    export function setWheelDirSpeed(wheel: mCarWheels, direction: wheelDir, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
         
         if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
             leftWheelSpeed = speed;
             i2cBuffer[0] = 0x05;
-            if(direction == wheelDir.CW)
+            if(direction == wheelDir.FW)         //forward
                 i2cBuffer[1] = leftWheelSpeed + 101;
-            else if (direction == wheelDir.CCW)
+            else if (direction == wheelDir.BW)   //backward
                 i2cBuffer[1] = leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
         }
         if (wheel == mCarWheels.RightWheel || wheel == mCarWheels.AllWheel) {
             rightWheelSpeed = speed;
             i2cBuffer[0] = 0x06;
-            if(direction == wheelDir.CW)
+            if(direction == wheelDir.FW)          //forward
                 i2cBuffer[1] = rightWheelSpeed;
-            else if (direction == wheelDir.CCW)
+            else if (direction == wheelDir.BW)    //backward
                 i2cBuffer[1] = rightWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
+    }
+
+
+    /**
+    * Set the speed of the wheels
+    */
+    //% group="Wheels"
+    //% block="Set left wheel speed %Lspeed\\% right wheel speed %Rspeed\\%"
+    //% Lspeed.min=-100 Lspeed.max=100
+    //% Rspeed.min=-100 Rspeed.max=100
+    //% weight=379
+    export function setWheelSpeed(Lspeed: number, Rspeed: number): void {
+        let i2cBuffer = pins.createBuffer(2)
+        
+        i2cBuffer[0] = 0x05;
+        if(Lspeed > 0){
+            leftWheelSpeed = Lspeed;
+            i2cBuffer[1] = leftWheelSpeed + 101;
+        }else{
+            leftWheelSpeed = Math.abs(Lspeed);
+            i2cBuffer[1] = leftWheelSpeed;
+        }
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
+
+        i2cBuffer[0] = 0x06;
+        if(Rspeed > 0){
+            rightWheelSpeed = Rspeed;
+            i2cBuffer[1] = rightWheelSpeed;
+        }else{
+            rightWheelSpeed = Math.abs(Rspeed);
+            i2cBuffer[1] = rightWheelSpeed + 101;
+        }
+        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
     }
 
 
@@ -259,28 +292,16 @@ namespace mCar {
     //% weight=340
     //%block="Car go %direction Speed %speed\\%"
     //% speed.min=0 speed.max=100
-    export function carDir(direction : mCarDir, speed: number): void {
-        let i2cBuffer = pins.createBuffer(2)
+    export function carDirSpeed(direction : mCarDir, speed: number): void {
         leftWheelSpeed = speed;
         rightWheelSpeed = speed;
 
         if (direction == mCarDir.FW) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = leftWheelSpeed + 101;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        }
-        else if (direction == mCarDir.BW) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = leftWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-    
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed + 101;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
+        }else if (direction == mCarDir.BW) {
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.BW, leftWheelSpeed);
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.BW, rightWheelSpeed);
         }
     }
 
@@ -294,27 +315,19 @@ namespace mCar {
     //% percent.min=0 percent.max=100
     //% speed.min=0 speed.max=100
     export function carTurn(direction: mCarTurn, percent: number, speed: number): void {
-        let i2cBuffer = pins.createBuffer(2);
-        leftWheelSpeed = speed;
-        rightWheelSpeed = speed;
-    
         if (direction == mCarTurn.Left) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = 101 + leftWheelSpeed - (leftWheelSpeed*(percent/100));
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            leftWheelSpeed = speed - (speed*(percent/100));
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
 
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            rightWheelSpeed = speed;
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
         }
         else if (direction == mCarTurn.Right) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = 101 + leftWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            leftWheelSpeed = speed;
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
     
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed - (rightWheelSpeed*(percent/100));
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            rightWheelSpeed = speed - (speed*(percent/100));
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
         }
     }
 
@@ -327,27 +340,15 @@ namespace mCar {
     //%block="Car turn %direction at place Speed %speed\\%"
     //% speed.min=0 speed.max=100
     export function carTurnPlace(direction : mCarTurn, speed: number): void {
-        let i2cBuffer = pins.createBuffer(2)
         leftWheelSpeed = speed;
         rightWheelSpeed = speed;
 
         if (direction == mCarTurn.Left) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = leftWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-        }
-        else if (direction == mCarTurn.Right) {
-            i2cBuffer[0] = 0x05;
-            i2cBuffer[1] = leftWheelSpeed + 101;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-    
-            i2cBuffer[0] = 0x06;
-            i2cBuffer[1] = rightWheelSpeed + 101;
-            pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.BW, leftWheelSpeed);
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
+        }else if (direction == mCarTurn.Right) {
+            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
+            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.BW, rightWheelSpeed);
         }
     }
 
@@ -359,17 +360,7 @@ namespace mCar {
     //% weight=310
     //%block="Car stop"
     export function carStop(): void {
-        let i2cBuffer = pins.createBuffer(2)
-        leftWheelSpeed = 0;
-        rightWheelSpeed = 0;
-
-        i2cBuffer[0] = 0x05;
-        i2cBuffer[1] = leftWheelSpeed;
-        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
-
-        i2cBuffer[0] = 0x06;
-        i2cBuffer[1] = rightWheelSpeed;
-        pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
+        wheelStop(mCarWheels.AllWheel);
     }
 
 
@@ -508,7 +499,19 @@ namespace mCar {
     export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
         return threeWayStateValue == state
     }
-    
+
+
+    /**
+    * get Grayscale Sensor Value
+    */
+    //% group="Tracking sensor"
+    //% weight=250
+    //%block="Tracking sensor value"
+    export function getGrayscaleSensorValue(): number {
+        return threeWayStateValue
+    }
+
+
     /**
     * check whether the channel is online
     */

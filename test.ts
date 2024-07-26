@@ -1,9 +1,9 @@
 mCar.irCallback(function () {
     if (mCar.irButton(mCarIRButtons.Up)) {
-        mCar.carDir(mCarDir.FW, 100)
+        mCar.carDirSpeed(mCarDir.FW, 100)
     }
     if (mCar.irButton(mCarIRButtons.Down)) {
-        mCar.carDir(mCarDir.BW, 100)
+        mCar.carDirSpeed(mCarDir.BW, 100)
     }
     if (mCar.irButton(mCarIRButtons.Left)) {
         mCar.carTurn(mCarTurn.Left, 50, 100)
@@ -27,9 +27,9 @@ mCar.irCallback(function () {
 mCar.wheelsAdjustment(0, 0)
 
 basic.pause(1000)
-mCar.setWheelSpeedDir(mCarWheels.AllWheel, 0, wheelDir.CW)
+mCar.setWheelDirSpeed(mCarWheels.AllWheel, 0, wheelDir.FW)
 basic.pause(1000)
-mCar.setWheelSpeedDir(mCarWheels.AllWheel, 0, wheelDir.CCW)
+mCar.setWheelDirSpeed(mCarWheels.AllWheel, 0, wheelDir.BW)
 basic.pause(1000)
 mCar.wheelStop(mCarWheels.LeftWheel)
 mCar.singleHeadlights(mCarRGBLight.RGBA, 255, 255, 255)
