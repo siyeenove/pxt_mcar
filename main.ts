@@ -378,7 +378,7 @@ namespace mCar {
         g = (color >> 8) & 0xFF
         b = color & 0xFF
 
-        if(light == mCarRGBLight.RGBL){
+        if (light == mCarRGBLight.RGBL || light == mCarRGBLight.RGBA){
             buf[0] = 0x07;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -389,7 +389,7 @@ namespace mCar {
             buf[1] = b;
             pins.i2cWriteBuffer(i2cAddr, buf)
         }
-        if (light == mCarRGBLight.RGBR) {
+        if (light == mCarRGBLight.RGBR || light == mCarRGBLight.RGBA) {
             buf[0] = 0x0a;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -672,7 +672,10 @@ namespace mCar {
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
 
         let batLevel = pins.i2cReadNumber(i2cAddr, NumberFormat.UInt8LE, false);
-        return batLevel;
+        if (batLevel>100)
+            batLevel = 100;
+        
+        return batLevel; 
     }
 
 
