@@ -68,7 +68,7 @@ enum TrackbitStateType {
     //% block="● ● ◌" 
     Tracking_State_6 = 1,
     //% block="● ● ●" 
-    Tracking_State_7 = 0,
+    Tracking_State_7 = 0
 }
 
 enum TrackbitType {
@@ -144,7 +144,7 @@ const enum mCarIRButtons {
     //% block="▼"
     Down = 0x52,
     //% block=" "
-    Unused_4 = -4,
+    Unused_4 = -4
 }
 
 enum batteryType {
