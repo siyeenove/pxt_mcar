@@ -72,9 +72,9 @@ enum TrackbitStateType {
 }
 
 enum TrackbitType {
-    //% block="◌" 
+    //% block="●"
     State_0 = 0,
-    //% block="●" 
+    //% block="◌"
     State_1 = 1
 }
 enum TrackbitChannel {
@@ -481,12 +481,13 @@ namespace mCar {
     //% weight=270
     //% block="Get the status value of the tracking sensor"
     export function trackbitStateValue() {
+        //  left=P14      centre=P15    right=P16
         let channel1 = 0, channel2 = 0, channel3 = 0;
 
         channel1 = pins.digitalReadPin(DigitalPin.P14);
         channel2 = pins.digitalReadPin(DigitalPin.P15);
         channel3 = pins.digitalReadPin(DigitalPin.P16);
-        threeWayStateValue = channel1 + (channel2 << 1) + (channel3 << 2);
+        threeWayStateValue = (channel1 << 2) + (channel2 << 1) + channel3;
     }
 
 
