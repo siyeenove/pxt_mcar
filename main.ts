@@ -154,6 +154,48 @@ enum batteryType {
     LithiumBattery
 }
 
+enum textview {
+    //%block="Left"
+    Left = 0,
+    //%block="Right"
+    Right = 1,
+}
+
+enum button {
+    //%block="F-pressed"
+    F1 = 0,
+    //%block="F-release"
+    F0 = 1,
+    //%block="OK-pressed"
+    OK1 = 2,
+    //%block="OK-release"
+    OK0 = 3,
+    //%block="B-pressed"
+    B1 = 4,
+    //%block="B-release"
+    B0 = 5,
+    //%block="L-pressed"
+    L1 = 6,
+    //%block="L-release"
+    L0 = 7,
+    //%block="R-pressed"
+    R1 = 8,
+    //%block="R-release"
+    R0 = 9,
+    //%block="1-pressed"
+    ONE1 = 10,
+    //%block="1-release"
+    ONE0 = 11,
+    //%block="2-pressed"
+    TWO1 = 12,
+    //%block="2-release"
+    TWO0 = 13,
+    //%block="3-pressed"
+    THREE1 = 14,
+    //%block="3-release"
+    THREE0 = 15
+}
+
 let IR_Val = 0
 let leftWheelSpeed = 0
 let rightWheelSpeed = 0
@@ -571,6 +613,7 @@ namespace mCar {
         return 0;
     }
 
+
     //% group="Infrared sensor"
     //% weight=160
     //% block="On IR receiving"
@@ -588,6 +631,7 @@ namespace mCar {
         })
     }
 
+
     /**
      * Select the value of the infrared key that you want to be pressed.
      */
@@ -602,6 +646,7 @@ namespace mCar {
         return (IR_Val & 0x00ff) == irButton as number
     }
 
+
     /**
      * Get IR value.
      * The correct infrared key value can only be read
@@ -613,6 +658,7 @@ namespace mCar {
     export function irValue(): number {
         return IR_Val & 0x00ff;
     }
+
 
     /**
      * servo control module
@@ -644,6 +690,7 @@ namespace mCar {
         buf[1] = angleMap;
         pins.i2cWriteBuffer(i2cAddr, buf);
     }
+
 
     /**
      * continuous servo control
@@ -677,6 +724,57 @@ namespace mCar {
             batLevel = 100;
         
         return batLevel; 
+    }
+
+
+    /**
+     * Send data to our app TextView.
+     */
+    //% group="APP command"
+    //% weight=90
+    //% block="%side textview display %str"
+    export function display(side: textview, str: string): string {
+        let strCmd;
+        if (side == textview.Left){
+            strCmd = "$-6-1-8-" + str + "-#";
+        }else if (side == textview.Right){
+            strCmd = "$-6-1-9-" + str + "-#";
+        }
+        return strCmd;
+    }
+
+
+    let cmdArray = [
+        "$-6-1-0-1-#",   // F-pressed
+        "$-6-1-0-0-#",   // F-release
+        "$-6-1-1-1-#",   // OK-pressed
+        "$-6-1-1-0-#",   // OK-release
+        "$-6-1-2-1-#",   // B-pressed
+        "$-6-1-2-0-#",   // B-release
+        "$-6-1-3-1-#",   // L-pressed
+        "$-6-1-3-0-#",   // L-release
+        "$-6-1-4-1-#",   // R-pressed
+        "$-6-1-4-0-#",   // R-release
+        "$-6-1-5-1-#",   // 1-pressed
+        "$-6-1-5-0-#",   // 1-release
+        "$-6-1-6-1-#",   // 2-pressed
+        "$-6-1-6-0-#",   // 2-release
+        "$-6-1-7-1-#",   // 3-pressed
+        "$-6-1-7-0-#",   // 3-release
+    ];
+
+    /**
+     * Check the buttons on the App.
+     */
+    //% group="APP command"
+    //% weight=90
+    //% block="%mybutton equal %button ?"
+    export function button(mybutton: string, button: button): boolean {
+        mybutton = mybutton + "#";
+        if (mybutton == cmdArray[button]) {
+            return true;
+        } 
+        return false;
     }
 
 
