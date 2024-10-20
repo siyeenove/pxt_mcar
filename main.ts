@@ -525,6 +525,9 @@ namespace mCar {
     export function trackbitStateValue() {
         //  left=P14      centre=P15    right=P16
         let channel1 = 0, channel2 = 0, channel3 = 0;
+        pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P15, PinPullMode.PullUp);
+        pins.setPull(DigitalPin.P16, PinPullMode.PullUp);
 
         channel1 = pins.digitalReadPin(DigitalPin.P14);
         channel2 = pins.digitalReadPin(DigitalPin.P15);
