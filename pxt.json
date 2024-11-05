@@ -1,11 +1,11 @@
 {
-    "name": "pxt-mcar",
+    "name": "mcar",
     "version": "1.0.0",
     "description": "mCar robot designed by Siyeenove",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "neopixel": "github:mworkfun/pxt-neopixel#v0.6.21"
+        "neopixel": "github:siyeenove/pxt-neopixel#v0.6.21"
     },
     "files": [
         "README.md",
