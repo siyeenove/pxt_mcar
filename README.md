@@ -5,9 +5,9 @@
 
 This library is designed to drive mCar, You can get mCar here.
 
-[Github](https://github.com/mworkfun/pxt_mcar)
+[Official website](http://siyeenove.com)
 
-You can refer to this [wiki](http://wiki.siyeenova.com)
+You can refer to this [tutorial](http://siyeenove.com/tutorial)
 
 ## Code Example
 ```JavaScript
