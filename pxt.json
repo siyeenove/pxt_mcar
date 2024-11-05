@@ -1,6 +1,6 @@
 {
     "name": "mcar",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "mCar robot designed by Siyeenove",
     "license": "MIT",
     "dependencies": {
