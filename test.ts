@@ -37,8 +37,6 @@ basic.showNumber(mCar.batteryLevel(BatteryType.AA))
 basic.pause(1000)
 basic.showString(mCar.readVersions())
 basic.pause(1000)
-let strip = neopixel.create(DigitalPin.P8, 2, NeoPixelMode.RGB)
-strip.showColor(neopixel.colors(NeoPixelColors.Orange))
 basic.forever(function () {
     mCar.trackbitStateValue()
     if (mCar.readGrayscaleSensorState(TrackbitStateType.Tracking_State_0)) {

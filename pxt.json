@@ -4,8 +4,7 @@
     "description": "mCar robot designed by Siyeenove",
     "license": "MIT",
     "dependencies": {
-        "core": "*",
-        "neopixel": "github:microsoft/pxt-neopixel#v0.7.6 "
+        "core": "*"
     },
     "files": [
         "README.md",
