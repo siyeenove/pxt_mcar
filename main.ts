@@ -148,9 +148,9 @@ const enum McarIRButtons {
 }
 
 enum BatteryType {
-    //% block="AA"
+    //% block="3 AA batteries"
     AA = 1,
-    //% block="lithium"
+    //% block="1 lithium battery"
     LithiumBattery
 }
 
@@ -282,7 +282,7 @@ namespace mCar {
     }
 
 
-    /*
+    /** 
      * wheels stop
      * @param wheel: The wheels of mCar.
      */
@@ -307,7 +307,7 @@ namespace mCar {
     }
 
 
-    /*
+    /** 
      * Wheels speed calibration.
      * When the speed of the left and right wheels of the mCar trolley is not consistent,
      * this function can adjust the speed of the wheel and save it permanently.
@@ -411,7 +411,7 @@ namespace mCar {
     }
 
 
-    /*
+    /** 
      * The car stopped
      */
     //% group="Car"
@@ -701,8 +701,8 @@ namespace mCar {
      */
     //% group="Expansion port"
     //% weight=120
-    //% block="set %servoType servo %index angle to %angle°"
-    export function extendServoControl(servoType: ServoType, index: McarServoIndex, angle: number): void {
+    //% block="set %index %servoType servo angle to %angle°"
+    export function extendServoControl(index: McarServoIndex, servoType: ServoType, angle: number): void {
         let angleMap: number
         if (servoType == ServoType.Servo90) {
             angleMap = Math.map(angle, 0, 90, 50, 200);
@@ -735,11 +735,11 @@ namespace mCar {
      */
     //% group="Expansion port"
     //% weight=110
-    //% block="set continuous servo %index speed to %speed\\%"
+    //% block="set %index 360° servo speed to %speed\\%"
     //% speed.min=-100 speed.max=100
     export function continuousServoControl(index: McarServoIndex, speed: number): void {
         speed = Math.map(speed, -100, 100, 0, 180)
-        extendServoControl(ServoType.Servo180, index, speed)
+        extendServoControl(index, ServoType.Servo180, speed)
     }
 
 
@@ -750,7 +750,7 @@ namespace mCar {
      */
     //% group="Battery"
     //% weight=100
-    //% block="read %batType battery level"
+    //% block="battery level: %batType"
     export function batteryLevel(batType: BatteryType) : number {
         let i2cBuffer = pins.createBuffer(1);
         if (batType == BatteryType.AA)
@@ -812,7 +812,7 @@ namespace mCar {
      */
     //% group="APP command"
     //% weight=90
-    //% block="%myButton equal %button ?"
+    //% block="%myButton equal %button"
     export function appButton(myButton: string, button: AppButton): boolean {
         myButton = myButton + "#";
         if (myButton == cmdArray[button]) {

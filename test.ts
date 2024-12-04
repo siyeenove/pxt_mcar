@@ -43,12 +43,12 @@ basic.forever(function () {
         basic.showIcon(IconNames.No)
         basic.pause(1000)
     }
-    mCar.extendServoControl(ServoType.Servo180, McarServoIndex.S1, 0)
+    mCar.extendServoControl(McarServoIndex.S1, ServoType.Servo180, 0)
     if (mCar.readGrayscaleSensorState(TrackbitStateType.Tracking_State_7)) {
         basic.showIcon(IconNames.Yes)
         basic.pause(1000)
     }
     basic.showNumber(mCar.ultrasonic(SonarUnit.Centimeters))
     basic.pause(1000)
-    mCar.extendServoControl(ServoType.Servo180, McarServoIndex.S1, 180)
+    mCar.extendServoControl(McarServoIndex.S1, ServoType.Servo180, 180)
 })
