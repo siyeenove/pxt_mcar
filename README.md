@@ -1,37 +1,52 @@
 
 # Siyeenove mCar Package
 
-![](/image.png/)
+![](/image.png/)  
 
 This library is designed to drive mCar, You can get mCar here.
 
-[Official website](http://siyeenove.com)
+[Buy](https://www.amazon.com/dp/B0DKX3G6M9)  
 
-You can refer to this [tutorial](http://siyeenove.com/tutorial)
+Product Tutorial: 
+
+[Github](https://github.com/siyeenove/M1C0000)   
+[Github PDF](https://github.com/siyeenove/M1C0000/blob/main/mCar%20Tutorial%20-%20English.pdf)  
+
+Please ignore security warnings, because this is an "http" URL!  
+[Official website Tutorial](http://siyeenove.com/tutorial)
 
 ## Code Example
 ```JavaScript
 
-mCar.irCallback(function () {
-    if (mCar.irButton(mCarIRButtons.Up)) {
-        mCar.carDir(mCarDir.FW, 100)
+// Process the received data in an infinite loop function. 
+mCar.irCallBack(function () {
+    // mCar performs different actions based on IR commands. 
+    if (mCar.irButton(McarIRButtons.Up)) {
+        // mCar goes forward at a speed of 100.
+        mCar.carDirectionSpeed(McarDir.FW, 100)
     }
-    if (mCar.irButton(mCarIRButtons.Down)) {
-        mCar.carDir(mCarDir.BW, 100)
+    if (mCar.irButton(McarIRButtons.Down)) {
+        // mCar goes backward at a speed of 100.
+        mCar.carDirectionSpeed(McarDir.BW, 100)
     }
-    if (mCar.irButton(mCarIRButtons.Left)) {
-        mCar.carTurn(mCarTurn.Left, 50, 100)
+    if (mCar.irButton(McarIRButtons.Left)) {
+        // The mCar is turning left at a speed of 100 with a turn rate of 50.
+        mCar.carTurn(McarTurn.Left, 50, 100)
     }
-    if (mCar.irButton(mCarIRButtons.Right)) {
-        mCar.carTurn(mCarTurn.Right, 50, 100)
+    if (mCar.irButton(McarIRButtons.Right)) {
+        // The mCar is turning right at a speed of 100 with a turn rate of 50.
+        mCar.carTurn(McarTurn.Right, 50, 100)
     }
-    if (mCar.irButton(mCarIRButtons.OK)) {
+    if (mCar.irButton(McarIRButtons.OK)) {
+        // mCar stop
         mCar.carStop()
     }
     if (mCar.irValue() != 0) {
+        // micro:bit 8 x 8 dot matrix Displays command values.
         basic.showNumber(mCar.irValue())
     }
 })
+// Set the calibration values of both mCar motors to 0.
 mCar.wheelsAdjustment(0, 0)
 basic.pause(1000)
 basic.forever(function () {

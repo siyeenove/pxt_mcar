@@ -1,38 +1,38 @@
 /*
 * This extension library was developed by the SIYEENOVE team and is only available for SIYEENOVE products.
-* Date: July 20, 2024  
+* Date: Dec 4, 2024  
 */
-enum mCarWheels {
-    //%block="left wheel"
-    LeftWheel = 1,
-    //%block="right wheel"
-    RightWheel = 2,
-    //%block="all wheel"
-    AllWheel = 3
-}
-
-enum wheelDir {
+enum WheelDir {
     //%block="forward"
     FW = 1,
     //%block="backward"
     BW = 2,
 }
 
-enum mCarDir {
+enum McarWheels {
+    //%block="left wheel"
+    LeftWheel = 1,
+    //%block="right wheel"
+    RightWheel = 2,
+    //%block="all wheels"
+    AllWheel = 3
+}
+
+enum McarDir {
     //% block="forward"
     FW = 1,
     //% block="backward"
     BW = 2
 }
 
-enum mCarTurn {
+enum McarTurn {
     //%block="left"
     Left = 0,
     //%block="right"
     Right = 1,
 }
 
-enum mCarServoIndex {
+enum McarServoIndex {
     //% block="S1"
     S1 = 1,
     //% block="S2"
@@ -41,12 +41,12 @@ enum mCarServoIndex {
     S3 = 3
 }
 
-enum mCarRGBLight {
-    //%block="left RGB"
+enum McarRGBLight {
+    //%block="left headlight"
     RGBL = 2,
-    //%block="right RGB"
+    //%block="right headlight"
     RGBR = 1,
-    //%block="all RGB"
+    //%block="all headlights"
     RGBA = 3
 }
 
@@ -78,11 +78,11 @@ enum TrackbitType {
     State_1 = 1
 }
 enum TrackbitChannel {
-    //% block="Left"
+    //% block="left"
     Three = 3,
-    //% block="Centre"
+    //% block="centre"
     Two = 2,
-    //% block="Right"
+    //% block="right"
     One = 1
 }
 
@@ -102,7 +102,7 @@ enum SonarUnit {
     Inches
 }
 
-const enum mCarIRButtons {
+const enum McarIRButtons {
     //% block="1"
     Number_1 = 0x45,
     //% block="2"
@@ -147,21 +147,21 @@ const enum mCarIRButtons {
     Unused_4 = -4
 }
 
-enum batteryType {
+enum BatteryType {
     //% block="AA"
     AA = 1,
-    //% block="Lithium"
+    //% block="lithium"
     LithiumBattery
 }
 
-enum textview {
-    //%block="Left"
+enum Textview {
+    //%block="left"
     Left = 0,
-    //%block="Right"
+    //%block="right"
     Right = 1,
 }
 
-enum button {
+enum AppButton {
     //%block="F-pressed"
     F1 = 0,
     //%block="F-release"
@@ -196,12 +196,13 @@ enum button {
     THREE0 = 15
 }
 
-let IR_Val = 0
-let leftWheelSpeed = 0
-let rightWheelSpeed = 0
-let threeWayStateValue = 0
 //% weight=10 color=#008C8C block="mCar" blockId="mCar" icon="\uf48b"
 namespace mCar {
+    let IR_Val = 0
+    let leftWheelSpeed = 0
+    let rightWheelSpeed = 0
+    let threeWayStateValue = 0
+
     let irstate: number;
     let state: number;
 
@@ -214,29 +215,32 @@ namespace mCar {
 
     /**
     * Set the speed and direction of the wheels
+    * @param wheel: The wheels of mCar.
+    * @param direction: The wheel goes forward or backward.
+    * @param speed: The speed at which the wheels turn, eg: 0--100
     */
     //% group="Wheels"
-    //% block="Set %wheel %direction speed %speed\\%"
+    //% block="set %wheel %direction speed %speed\\%"
     //% speed.min=0 speed.max=100
     //% weight=380
-    export function setWheelDirSpeed(wheel: mCarWheels, direction: wheelDir, speed: number): void {
+    export function setWheelDirectionSpeed(wheel: McarWheels, direction: WheelDir, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
         
-        if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
+        if (wheel == McarWheels.LeftWheel || wheel == McarWheels.AllWheel) {
             leftWheelSpeed = speed;
             i2cBuffer[0] = 0x05;
-            if(direction == wheelDir.FW)         //forward
+            if(direction == WheelDir.FW)         //forward
                 i2cBuffer[1] = leftWheelSpeed + 101;
-            else if (direction == wheelDir.BW)   //backward
+            else if (direction == WheelDir.BW)   //backward
                 i2cBuffer[1] = leftWheelSpeed;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
         }
-        if (wheel == mCarWheels.RightWheel || wheel == mCarWheels.AllWheel) {
+        if (wheel == McarWheels.RightWheel || wheel == McarWheels.AllWheel) {
             rightWheelSpeed = speed;
             i2cBuffer[0] = 0x06;
-            if(direction == wheelDir.FW)          //forward
+            if(direction == WheelDir.FW)          //forward
                 i2cBuffer[1] = rightWheelSpeed;
-            else if (direction == wheelDir.BW)    //backward
+            else if (direction == WheelDir.BW)    //backward
                 i2cBuffer[1] = rightWheelSpeed + 101;
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
@@ -244,32 +248,34 @@ namespace mCar {
 
 
     /**
-    * Set the speed of the wheels
-    */
+     * Set the speed and direction of the wheel.
+     * @param leftSpeed: Set the speed and direction of the left wheel. 
+     * @param rightSpeed: Set the speed and direction of the right wheel. 
+     */
     //% group="Wheels"
-    //% block="Set left wheel speed %Lspeed\\% right wheel speed %Rspeed\\%"
-    //% Lspeed.min=-100 Lspeed.max=100
-    //% Rspeed.min=-100 Rspeed.max=100
+    //% block="set left wheel speed %leftSpeed\\% right wheel speed %rightSpeed\\%"
+    //% leftSpeed.min=-100 leftSpeed.max=100
+    //% rightSpeed.min=-100 rightSpeed.max=100
     //% weight=379
-    export function setWheelSpeed(Lspeed: number, Rspeed: number): void {
+    export function setWheelSpeed(leftSpeed: number, rightSpeed: number): void {
         let i2cBuffer = pins.createBuffer(2)
         
         i2cBuffer[0] = 0x05;
-        if(Lspeed > 0){
-            leftWheelSpeed = Lspeed;
+        if (leftSpeed > 0){
+            leftWheelSpeed = leftSpeed;
             i2cBuffer[1] = leftWheelSpeed + 101;
         }else{
-            leftWheelSpeed = Math.abs(Lspeed);
+            leftWheelSpeed = Math.abs(leftSpeed);
             i2cBuffer[1] = leftWheelSpeed;
         }
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
 
         i2cBuffer[0] = 0x06;
-        if(Rspeed > 0){
-            rightWheelSpeed = Rspeed;
+        if (rightSpeed > 0){
+            rightWheelSpeed = rightSpeed;
             i2cBuffer[1] = rightWheelSpeed;
         }else{
-            rightWheelSpeed = Math.abs(Rspeed);
+            rightWheelSpeed = Math.abs(rightSpeed);
             i2cBuffer[1] = rightWheelSpeed + 101;
         }
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
@@ -278,20 +284,21 @@ namespace mCar {
 
     /*
      * wheels stop
+     * @param wheel: The wheels of mCar.
      */
     //% group="Wheels"
     //% weight=370
-    //%block="Set %Wheel to stop"
-    export function wheelStop(wheel: mCarWheels): void {
+    //%block="set %wheel to stop"
+    export function wheelStop(wheel: McarWheels): void {
         let i2cBuffer = pins.createBuffer(2)
 
-        if (wheel == mCarWheels.LeftWheel || wheel == mCarWheels.AllWheel) {
+        if (wheel == McarWheels.LeftWheel || wheel == McarWheels.AllWheel) {
             leftWheelSpeed = 0;
             i2cBuffer[0] = 0x05;
             i2cBuffer[1] = leftWheelSpeed; 
             pins.i2cWriteBuffer(i2cAddr, i2cBuffer)
         }
-        if (wheel == mCarWheels.RightWheel || wheel == mCarWheels.AllWheel) {
+        if (wheel == McarWheels.RightWheel || wheel == McarWheels.AllWheel) {
             rightWheelSpeed = 0;
             i2cBuffer[0] = 0x06;
             i2cBuffer[1] = rightWheelSpeed;
@@ -304,10 +311,12 @@ namespace mCar {
      * Wheels speed calibration.
      * When the speed of the left and right wheels of the mCar trolley is not consistent,
      * this function can adjust the speed of the wheel and save it permanently.
+     * @param offset1: left Wheel offset, eg: -10--0
+     * @param offset1: right Wheel offset, eg: -10--0
      */
     //% group="Wheels"
     //% weight=360
-    //%block="Wheels speed offset: left wheel %offset1 right wheel %offset2"
+    //%block="wheels speed offset: left wheel %offset1 right wheel %offset2"
     //% offset1.min=-10 offset1.max=0
     //% offset2.min=-10 offset2.max=0
     export function wheelsAdjustment(offset1: number, offset2: number): void {
@@ -329,68 +338,75 @@ namespace mCar {
 
     /**
      * Set car direction
+     * @param direction: The direction of the mCar runs.
+     * @param speed: The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=340
-    //%block="Car go %direction Speed %speed\\%"
+    //%block="car go %direction Speed %speed\\%"
     //% speed.min=0 speed.max=100
-    export function carDirSpeed(direction : mCarDir, speed: number): void {
+    export function carDirectionSpeed(direction: McarDir, speed: number): void {
         leftWheelSpeed = speed;
         rightWheelSpeed = speed;
 
-        if (direction == mCarDir.FW) {
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
-        }else if (direction == mCarDir.BW) {
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.BW, leftWheelSpeed);
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.BW, rightWheelSpeed);
+        if (direction == McarDir.FW) {
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.FW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.FW, rightWheelSpeed);
+        } else if (direction == McarDir.BW) {
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.BW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.BW, rightWheelSpeed);
         }
     }
 
 
     /**
      * Car turn
+     * @param direction: The direction of the mCar runs.
+     * @param percent: Control the Angle at which the mCar turns.
+     * @param speed: The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=320
-    //%block="Car turn %direction Turn rate %percent\\% Speed %speed\\%"
+    //%block="car turn %direction Turn rate %percent\\% Speed %speed\\%"
     //% percent.min=0 percent.max=100
     //% speed.min=0 speed.max=100
-    export function carTurn(direction: mCarTurn, percent: number, speed: number): void {
-        if (direction == mCarTurn.Left) {
+    export function carTurn(direction: McarTurn, percent: number, speed: number): void {
+        if (direction == McarTurn.Left) {
             leftWheelSpeed = speed - (speed*(percent/100));
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.FW, leftWheelSpeed);
 
             rightWheelSpeed = speed;
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.FW, rightWheelSpeed);
         }
-        else if (direction == mCarTurn.Right) {
+        else if (direction == McarTurn.Right) {
             leftWheelSpeed = speed;
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.FW, leftWheelSpeed);
     
             rightWheelSpeed = speed - (speed*(percent/100));
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.FW, rightWheelSpeed);
         }
     }
 
 
     /**
      * Car turn at place
+     * @param direction: The direction of the mCar runs.
+     * @param speed: The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=320
-    //%block="Car turn %direction at place Speed %speed\\%"
+    //%block="car turn %direction at place Speed %speed\\%"
     //% speed.min=0 speed.max=100
-    export function carTurnPlace(direction : mCarTurn, speed: number): void {
+    export function carTurnPlace(direction: McarTurn, speed: number): void {
         leftWheelSpeed = speed;
         rightWheelSpeed = speed;
 
-        if (direction == mCarTurn.Left) {
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.BW, leftWheelSpeed);
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.FW, rightWheelSpeed);
-        }else if (direction == mCarTurn.Right) {
-            setWheelDirSpeed(mCarWheels.LeftWheel, wheelDir.FW, leftWheelSpeed);
-            setWheelDirSpeed(mCarWheels.RightWheel, wheelDir.BW, rightWheelSpeed);
+        if (direction == McarTurn.Left) {
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.BW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.FW, rightWheelSpeed);
+        } else if (direction == McarTurn.Right) {
+            setWheelDirectionSpeed(McarWheels.LeftWheel, WheelDir.FW, leftWheelSpeed);
+            setWheelDirectionSpeed(McarWheels.RightWheel, WheelDir.BW, rightWheelSpeed);
         }
     }
 
@@ -400,27 +416,29 @@ namespace mCar {
      */
     //% group="Car"
     //% weight=310
-    //%block="Car stop"
+    //%block="car stop"
     export function carStop(): void {
-        wheelStop(mCarWheels.AllWheel);
+        wheelStop(McarWheels.AllWheel);
     }
 
 
     /**
     * set LED headlights.
+    * @param light: Choose which headlights to use.
+    * @param color: Colors to light up.
     */
     //% group="RGB LED headlights"
-    //% block="Set %mCarRGBLight LED headlights color: $color"
+    //% block="set %light color: $color"
     //% color.shadow="colorNumberPicker"
     //% weight=300
-    export function rgbLight(light: mCarRGBLight, color: number) {
+    export function rgbLight(light: McarRGBLight, color: number) {
         let r: number, g: number, b: number = 0
         let buf = pins.createBuffer(2)
         r = color >> 16
         g = (color >> 8) & 0xFF
         b = color & 0xFF
 
-        if (light == mCarRGBLight.RGBL || light == mCarRGBLight.RGBA){
+        if (light == McarRGBLight.RGBL || light == McarRGBLight.RGBA){
             buf[0] = 0x07;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -431,7 +449,7 @@ namespace mCar {
             buf[1] = b;
             pins.i2cWriteBuffer(i2cAddr, buf)
         }
-        if (light == mCarRGBLight.RGBR || light == mCarRGBLight.RGBA) {
+        if (light == McarRGBLight.RGBR || light == McarRGBLight.RGBA) {
             buf[0] = 0x0a;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -447,20 +465,20 @@ namespace mCar {
 
     /**
     * select a headlights and set the RGB color.
-    * @param R R color value of RGB color, eg: 0
-    * @param G G color value of RGB color, eg: 128
-    * @param B B color value of RGB color, eg: 255
+    * @param r: red color value of RGB color, eg: 0
+    * @param g: green color value of RGB color, eg: 128
+    * @param b: blue color value of RGB color, eg: 255
     */
     //% group="RGB LED headlights"
     //% inlineInputMode=inline
-    //% blockId=RGB block="Set %mCarRGBLight LED headlights color: R %r G %g B %b"
+    //% blockId=RGB block="set %mCarRGBLight color: red %r green %g blue %b"
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
     //% weight=290
-    export function singleHeadlights(light: mCarRGBLight, r: number, g: number, b: number): void {
+    export function singleHeadlights(light: McarRGBLight, r: number, g: number, b: number): void {
         let buf = pins.createBuffer(2);
-        if (light == mCarRGBLight.RGBL || light == mCarRGBLight.RGBA) {
+        if (light == McarRGBLight.RGBL || light == McarRGBLight.RGBA) {
             buf[0] = 0x07;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -471,7 +489,7 @@ namespace mCar {
             buf[1] = b;
             pins.i2cWriteBuffer(i2cAddr, buf)
         }
-        if (light == mCarRGBLight.RGBR || light == mCarRGBLight.RGBA) {
+        if (light == McarRGBLight.RGBR || light == McarRGBLight.RGBA) {
             buf[0] = 0x0a;
             buf[1] = r;
             pins.i2cWriteBuffer(i2cAddr, buf)
@@ -489,7 +507,7 @@ namespace mCar {
     * turn off all the LED lights
     */
     //% group="RGB LED headlights"
-    //% block="Turn off all RGB LED headlights"
+    //% block="turn off all RGB LED headlights"
     //% weight=280
     export function turnOffAllHeadlights(): void {
         let buf = pins.createBuffer(2);
@@ -517,11 +535,11 @@ namespace mCar {
 
 
     /**
-    * get a status value of the 3-way line following sensor
+    * read a status value of the 3-way line following sensor
     */
     //% group="Tracking sensor"
     //% weight=270
-    //% block="Get the status value of the tracking sensor"
+    //% block="read tracking sensor status"
     export function trackbitStateValue() {
         //  left=P14      centre=P15    right=P16
         let channel1 = 0, channel2 = 0, channel3 = 0;
@@ -537,23 +555,23 @@ namespace mCar {
 
 
     /**
-    * get Grayscale Sensor State
+    * read Grayscale Sensor State
     */
     //% group="Tracking sensor"
     //% weight=260
-    //%block="Tracking sensor state is %TrackbitStateType"
-    export function getGrayscaleSensorState(state: TrackbitStateType): boolean {
+    //%block="tracking sensor state is %state"
+    export function readGrayscaleSensorState(state: TrackbitStateType): boolean {
         return threeWayStateValue == state
     }
 
 
     /**
-    * get Grayscale Sensor Value
-    */
+     * read Grayscale Sensor Value
+     */
     //% group="Tracking sensor"
     //% weight=250
-    //%block="Tracking sensor value"
-    export function getGrayscaleSensorValue(): number {
+    //%block="tracking sensor value"
+    export function readGrayscaleSensorValue(): number {
         return threeWayStateValue
     }
 
@@ -563,7 +581,7 @@ namespace mCar {
     */
     //% group="Tracking sensor"
     //% weight=240
-    //% block="%TrackbitChannel tracking sensor state is %TrackbitType"
+    //% block="%channel tracking sensor state is %state"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
         if (state == TrackbitType.State_1)
             if (threeWayStateValue & (1 << (channel - 1))) {
@@ -584,11 +602,11 @@ namespace mCar {
 
 
     /**
-      * cars can extend the ultrasonic function to prevent collisions and other functions..
-      * @param Sonarunit two states of ultrasonic module, eg: Centimeters
+      * mCar extends the ultrasonic module to read the distance values measured by the ultrasonic module.
+      * Returns the distance value measured by the ultrasonic module, eg: Centimeters
       */
     //% group="Sonar sensor"
-    //% blockId=ultrasonic block="Sonar sensor unit %SonarUnit"
+    //% blockId=ultrasonic block="sonar distance %unit"
     //% weight=220
     export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
         // send pulse
@@ -610,24 +628,34 @@ namespace mCar {
         }
     }
 
-
-    //% shim=IRV1::irCode
+    /**
+     * 
+     */
+    //% shim=mCarInfrared::irCode
     function irCode(): number {
         return 0;
     }
 
-
+    /**
+      * This function runs in the background all the time to read the value 
+      * to be controlled in the IR in real time.
+      */
     //% group="Infrared sensor"
     //% weight=160
-    //% block="On IR receiving"
-    export function irCallback(handler: () => void) {  //handler是irCallback函数的函数型参数，也是irCallback函数生成语块里面要执行的语块。
+    //% block="on IR receiving"
+    export function irCallBack(handler: () => void) {  
+        //handler is the functional argument to the irCallback function and is the block
+        //to be executed inside the irCallback function generation block.
+        //(handler是irCallback函数的函数型参数，也是irCallback函数生成语块里面要执行的语块。)
         pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
-        control.onEvent(98, 3500, handler)             //注册一个触发事件，handler为触发事件要执行的函数。
+        //A trigger event is registered, and handler is the function to execute to trigger the event.
+        control.onEvent(98, 3500, handler)             
         control.inBackground(() => {
             while (true) {
                 IR_Val = irCode()
                 if (IR_Val != 0xff00) {
-                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire) //触发上面注册的事件（control.onEvent（））
+                    //Fires the event registered above（control.onEvent（））
+                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire) 
                 }
                 basic.pause(20)
             }
@@ -645,15 +673,16 @@ namespace mCar {
     //% irButton.fieldOptions.tooltips="false"
     //% block="IR button %irButton is pressed"
     //% weight=151
-    export function irButton(irButton: mCarIRButtons): boolean {
+    export function irButton(irButton: McarIRButtons): boolean {
         return (IR_Val & 0x00ff) == irButton as number
     }
 
 
     /**
-     * Get IR value.
+     * Read IR value.
      * The correct infrared key value can only be read
      * when the infrared key value is not equal to 0 by logical judgment.
+     * Return the key value of the infrared remote control, only the instruction code.
      */
     //% group="Infrared sensor"
     //% block="IR value"
@@ -664,31 +693,35 @@ namespace mCar {
 
 
     /**
-     * servo control module
+     * servo control module, used for 90, 180, 270 degrees servo.
+     * When the S1--S3 ports of mCar are connected to the servo, this function can control the servo.
+     * @param servoType: Servo type, eg: 90, 180, 270
+     * @param index: Servo interface on mCar, eg: S1, S2, S2
+     * @param angle: The Angle of rotation of the servo.
      */
     //% group="Expansion port"
     //% weight=120
-    //% block="Set %ServoType servo %mCarServoIndex angel to %angle°"
-    export function extendServoControl(servotype: ServoType, index: mCarServoIndex, angle: number): void {
+    //% block="set %servoType servo %index angle to %angle°"
+    export function extendServoControl(servoType: ServoType, index: McarServoIndex, angle: number): void {
         let angleMap: number
-        if (servotype == ServoType.Servo90) {
+        if (servoType == ServoType.Servo90) {
             angleMap = Math.map(angle, 0, 90, 50, 200);
         }
 
-        if (servotype == ServoType.Servo180) {
+        if (servoType == ServoType.Servo180) {
             angleMap = Math.map(angle, 0, 180, 50, 200);
         }
 
-        if (servotype == ServoType.Servo270) {
+        if (servoType == ServoType.Servo270) {
             angleMap = Math.map(angle, 0, 270, 50, 200);
         }
 
         let buf = pins.createBuffer(2)
-        if(index == mCarServoIndex.S1)
+        if (index == McarServoIndex.S1)
             buf[0] = 0x0d;
-        else if (index == mCarServoIndex.S2)
+        else if (index == McarServoIndex.S2)
             buf[0] = 0x0e;
-        else if (index == mCarServoIndex.S3)
+        else if (index == McarServoIndex.S3)
             buf[0] = 0x0f;
         buf[1] = angleMap;
         pins.i2cWriteBuffer(i2cAddr, buf);
@@ -696,29 +729,33 @@ namespace mCar {
 
 
     /**
-     * continuous servo control
+     * The steering gear rotates continuously, and is used for the steering gear of 360 degrees rotation.
+     * @param index: Servo interface on mCar, eg: S1, S2, S2
+     * @param speed: The speed at which the servo rotates.
      */
     //% group="Expansion port"
     //% weight=110
-    //% block="Set continuous servo %mCarServoIndex speed to %speed\\%"
+    //% block="set continuous servo %index speed to %speed\\%"
     //% speed.min=-100 speed.max=100
-    export function continuousServoControl(index: mCarServoIndex, speed: number): void {
+    export function continuousServoControl(index: McarServoIndex, speed: number): void {
         speed = Math.map(speed, -100, 100, 0, 180)
         extendServoControl(ServoType.Servo180, index, speed)
     }
 
 
     /**
-    * Get the battery voltage
-    */
+     * Read the battery level.
+     * @param batType: Type of battery. eg: 3 AA battery, 1 lithium battery
+     * Return 0--100
+     */
     //% group="Battery"
     //% weight=100
-    //% block="Read %batType battery level"
-    export function batteryLevel(batType: batteryType) : number {
+    //% block="read %batType battery level"
+    export function batteryLevel(batType: BatteryType) : number {
         let i2cBuffer = pins.createBuffer(1);
-        if (batType == batteryType.AA)
+        if (batType == BatteryType.AA)
             i2cBuffer[0] = 0x01;
-        else if (batType == batteryType.LithiumBattery)
+        else if (batType == BatteryType.LithiumBattery)
             i2cBuffer[0] = 0x02;
         pins.i2cWriteBuffer(i2cAddr, i2cBuffer);
 
@@ -731,22 +768,24 @@ namespace mCar {
 
 
     /**
-     * Send data to our app TextView.
+     * Send a string to the left and right text fields of the APP.
+     * @param side：Text display box. eg: left, right
+     * @param str：The string to display.
      */
     //% group="APP command"
-    //% weight=90
+    //% weight=91
     //% block="%side textview display %str"
-    export function display(side: textview, str: string): string {
+    export function display(side: Textview, str: string): string {
         let strCmd;
-        if (side == textview.Left){
+        if (side == Textview.Left){
             strCmd = "$-6-1-8-" + str + "-#";
-        }else if (side == textview.Right){
+        }else if (side == Textview.Right){
             strCmd = "$-6-1-9-" + str + "-#";
         }
         return strCmd;
     }
 
-
+    // APP commands.
     let cmdArray = [
         "$-6-1-0-1-#",   // F-pressed
         "$-6-1-0-0-#",   // F-release
@@ -768,13 +807,15 @@ namespace mCar {
 
     /**
      * Check the buttons on the App.
+     * @param myButton: Bluetooth serial port reads APP string instructions.
+     * @param button: State of the button on the APP.
      */
     //% group="APP command"
     //% weight=90
-    //% block="%mybutton equal %button ?"
-    export function button(mybutton: string, button: button): boolean {
-        mybutton = mybutton + "#";
-        if (mybutton == cmdArray[button]) {
+    //% block="%myButton equal %button ?"
+    export function appButton(myButton: string, button: AppButton): boolean {
+        myButton = myButton + "#";
+        if (myButton == cmdArray[button]) {
             return true;
         } 
         return false;
@@ -782,11 +823,12 @@ namespace mCar {
 
 
     /**
-    * read version number
-    */
+     * Read the firmware version of the chip on the mCar.
+     * Returns a string, eg："Vxx"
+     */
     //% group="Others"
     //% weight=1
-    //% block="Version number"
+    //% block="version number"
     export function readVersions(): string {
         let mCarVersions: number = 0;
 
