@@ -1,6 +1,6 @@
 /*
 * This extension library was developed by the SIYEENOVE team and is only available for SIYEENOVE products.
-* Date: Dec 4, 2024  
+* Date: Dec 7, 2024  
 */
 enum WheelDir {
     //%block="forward"
@@ -283,7 +283,7 @@ namespace mCar {
 
 
     /** 
-     * wheels stop
+     * Wheels stop.
      * @param wheel: The wheels of mCar.
      */
     //% group="Wheels"
@@ -337,7 +337,7 @@ namespace mCar {
 
 
     /**
-     * Set car direction
+     * Set car direction.
      * @param direction: The direction of the mCar runs.
      * @param speed: The speed at which mCar runs.
      */
@@ -360,7 +360,7 @@ namespace mCar {
 
 
     /**
-     * Car turn
+     * Car turn.
      * @param direction: The direction of the mCar runs.
      * @param percent: Control the Angle at which the mCar turns.
      * @param speed: The speed at which mCar runs.
@@ -389,7 +389,7 @@ namespace mCar {
 
 
     /**
-     * Car turn at place
+     * Car turn at place.
      * @param direction: The direction of the mCar runs.
      * @param speed: The speed at which mCar runs.
      */
@@ -423,7 +423,7 @@ namespace mCar {
 
 
     /**
-    * set LED headlights.
+    * Set LED headlights.
     * @param light: Choose which headlights to use.
     * @param color: Colors to light up.
     */
@@ -464,7 +464,7 @@ namespace mCar {
 
 
     /**
-    * select a headlights and set the RGB color.
+    * Select a headlight and set the RGB color.
     * @param r: red color value of RGB color, eg: 0
     * @param g: green color value of RGB color, eg: 128
     * @param b: blue color value of RGB color, eg: 255
@@ -504,7 +504,7 @@ namespace mCar {
 
 
     /**
-    * turn off all the LED lights
+    * Turn off all the LED lights.
     */
     //% group="RGB LED headlights"
     //% block="turn off all RGB LED headlights"
@@ -535,7 +535,7 @@ namespace mCar {
 
 
     /**
-    * read a status value of the 3-way line following sensor
+    * Read 3 grayscale sensor values.
     */
     //% group="Tracking sensor"
     //% weight=270
@@ -555,8 +555,8 @@ namespace mCar {
 
 
     /**
-    * read Grayscale Sensor State
-    */
+     * Judge 3 gray sensor values.
+     */
     //% group="Tracking sensor"
     //% weight=260
     //%block="tracking sensor state is %state"
@@ -566,19 +566,19 @@ namespace mCar {
 
 
     /**
-     * read Grayscale Sensor Value
+     * Return 3 grayscale sensor values.
      */
     //% group="Tracking sensor"
     //% weight=250
     //%block="tracking sensor value"
-    export function readGrayscaleSensorValue(): number {
+    export function returnGrayscaleSensorValue(): number {
         return threeWayStateValue
     }
 
 
     /**
-    * check whether the channel is online
-    */
+     * Check whether the single grayscale Sensor is on the black line.
+     */
     //% group="Tracking sensor"
     //% weight=240
     //% block="%channel tracking sensor state is %state"
@@ -744,7 +744,7 @@ namespace mCar {
 
 
     /**
-     * Read the battery level.
+     * Sets the battery type and returns the battery level.
      * @param batType: Type of battery. eg: 3 AA battery, 1 lithium battery
      * Return 0--100
      */
@@ -824,7 +824,7 @@ namespace mCar {
 
     /**
      * Read the firmware version of the chip on the mCar.
-     * Returns a string, eg："Vxx"
+     * Returns a string, eg："Vx"
      */
     //% group="Others"
     //% weight=1
