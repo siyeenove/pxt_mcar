@@ -1,6 +1,6 @@
 /*
-* This extension library was developed by the SIYEENOVE team and is only available for SIYEENOVE products.
-* Date: Dec 7, 2024  
+* This extension library was developed by the SIYEENOVE team.
+* Date: Dec 9, 2024  
 */
 enum WheelDir {
     //%block="forward"
@@ -603,7 +603,7 @@ namespace mCar {
 
     /**
       * mCar extends the ultrasonic module to read the distance values measured by the ultrasonic module.
-      * Returns the distance value measured by the ultrasonic module, eg: Centimeters
+      * Returns the distance value measured by the ultrasonic module, eg: Centimeters, Inch
       */
     //% group="Sonar sensor"
     //% blockId=ultrasonic block="sonar distance %unit"
@@ -693,7 +693,7 @@ namespace mCar {
 
 
     /**
-     * servo control module, used for 90, 180, 270 degrees servo.
+     * Servo control module, used for 90, 180, 270 degrees servo.
      * When the S1--S3 ports of mCar are connected to the servo, this function can control the servo.
      * @param servoType: Servo type, eg: 90, 180, 270
      * @param index: Servo interface on mCar, eg: S1, S2, S2
