@@ -15,26 +15,26 @@ Product Tutorial:
 ## Code Example
 ```JavaScript
 
-// Process the received data in an infinite loop function. 
+// Process the received data in an infinite loop function.
 mCar.irCallBack(function () {
-    // mCar performs different actions based on IR commands. 
-    if (mCar.irButton(McarIRButtons.Up)) {
+    // mCar performs different actions based on IR commands.
+    if (mCar.irButton(mCar.McarIRButtons.Up)) {
         // mCar goes forward at a speed of 100.
-        mCar.carDirectionSpeed(McarDir.FW, 100)
+        mCar.carDirectionSpeed(mCar.McarDir.FW, 100)
     }
-    if (mCar.irButton(McarIRButtons.Down)) {
+    if (mCar.irButton(mCar.McarIRButtons.Down)) {
         // mCar goes backward at a speed of 100.
-        mCar.carDirectionSpeed(McarDir.BW, 100)
+        mCar.carDirectionSpeed(mCar.McarDir.BW, 100)
     }
-    if (mCar.irButton(McarIRButtons.Left)) {
+    if (mCar.irButton(mCar.McarIRButtons.Left)) {
         // The mCar is turning left at a speed of 100 with a turn rate of 50.
-        mCar.carTurn(McarTurn.Left, 50, 100)
+        mCar.carTurn(mCar.McarTurn.Left, 50, 100)
     }
-    if (mCar.irButton(McarIRButtons.Right)) {
+    if (mCar.irButton(mCar.McarIRButtons.Right)) {
         // The mCar is turning right at a speed of 100 with a turn rate of 50.
-        mCar.carTurn(McarTurn.Right, 50, 100)
+        mCar.carTurn(mCar.McarTurn.Right, 50, 100)
     }
-    if (mCar.irButton(McarIRButtons.OK)) {
+    if (mCar.irButton(mCar.McarIRButtons.OK)) {
         // mCar stop
         mCar.carStop()
     }
@@ -51,6 +51,7 @@ basic.forever(function () {
 })
 
 ```
+
 ## Supported targets
 for PXT/microbit
 
