@@ -1,17 +1,17 @@
 mCar.irCallBack(function () {
-    if (mCar.irButton(McarIRButtons.Up)) {
-        mCar.carDirectionSpeed(McarDir.FW, 100)
+    if (mCar.irButton(mCar.McarIRButtons.Up)) {
+        mCar.carDirectionSpeed(mCar.McarDir.FW, 100)
     }
-    if (mCar.irButton(McarIRButtons.Down)) {
-        mCar.carDirectionSpeed(McarDir.BW, 100)
+    if (mCar.irButton(mCar.McarIRButtons.Down)) {
+        mCar.carDirectionSpeed(mCar.McarDir.BW, 100)
     }
-    if (mCar.irButton(McarIRButtons.Left)) {
-        mCar.carTurn(McarTurn.Left, 50, 100)
+    if (mCar.irButton(mCar.McarIRButtons.Left)) {
+        mCar.carTurn(mCar.McarTurn.Left, 50, 100)
     }
-    if (mCar.irButton(McarIRButtons.Right)) {
-        mCar.carTurn(McarTurn.Right, 50, 100)
+    if (mCar.irButton(mCar.McarIRButtons.Right)) {
+        mCar.carTurn(mCar.McarTurn.Right, 50, 100)
     }
-    if (mCar.irButton(McarIRButtons.OK)) {
+    if (mCar.irButton(mCar.McarIRButtons.OK)) {
         mCar.carStop()
     }
 
@@ -27,28 +27,28 @@ mCar.irCallBack(function () {
 mCar.wheelsAdjustment(0, 0)
 
 basic.pause(1000)
-mCar.setWheelDirectionSpeed(McarWheels.AllWheel, 0, WheelDir.FW)
+mCar.setWheelDirectionSpeed(mCar.McarWheels.AllWheel, 0, mCar.WheelDir.FW)
 basic.pause(1000)
-mCar.setWheelDirectionSpeed(McarWheels.AllWheel, 0, WheelDir.BW)
+mCar.setWheelDirectionSpeed(mCar.McarWheels.AllWheel, 0, mCar.WheelDir.BW)
 basic.pause(1000)
-mCar.wheelStop(McarWheels.LeftWheel)
-mCar.singleHeadlights(McarRGBLight.RGBA, 255, 255, 255)
-basic.showNumber(mCar.batteryLevel(BatteryType.AA))
+mCar.wheelStop(mCar.McarWheels.LeftWheel)
+mCar.singleHeadlights(mCar.McarRGBLight.RGBA, 255, 255, 255)
+basic.showNumber(mCar.batteryLevel(mCar.BatteryType.AA))
 basic.pause(1000)
 basic.showString(mCar.readVersions())
 basic.pause(1000)
 basic.forever(function () {
     mCar.trackbitStateValue()
-    if (mCar.readGrayscaleSensorState(TrackbitStateType.Tracking_State_0)) {
+    if (mCar.readGrayscaleSensorState(mCar.TrackbitStateType.TrackingState0)) {
         basic.showIcon(IconNames.No)
         basic.pause(1000)
     }
-    mCar.extendServoControl(McarServoIndex.S1, ServoType.Servo180, 0)
-    if (mCar.readGrayscaleSensorState(TrackbitStateType.Tracking_State_7)) {
+    mCar.extendServoControl(mCar.McarServoIndex.S1, mCar.ServoType.Servo180, 0)
+    if (mCar.readGrayscaleSensorState(mCar.TrackbitStateType.TrackingState7)) {
         basic.showIcon(IconNames.Yes)
         basic.pause(1000)
     }
-    basic.showNumber(mCar.ultrasonic(SonarUnit.Centimeters))
+    basic.showNumber(mCar.ultrasonic(mCar.SonarUnit.Centimeters))
     basic.pause(1000)
-    mCar.extendServoControl(McarServoIndex.S1, ServoType.Servo180, 180)
+    mCar.extendServoControl(mCar.McarServoIndex.S1, mCar.ServoType.Servo180, 180)
 })

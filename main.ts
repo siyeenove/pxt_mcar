@@ -2,202 +2,203 @@
 * This extension library was developed by the SIYEENOVE team.
 * Date: Dec 9, 2024  
 */
-enum WheelDir {
-    //%block="forward"
-    FW = 1,
-    //%block="backward"
-    BW = 2,
-}
-
-enum McarWheels {
-    //%block="left wheel"
-    LeftWheel = 1,
-    //%block="right wheel"
-    RightWheel = 2,
-    //%block="all wheels"
-    AllWheel = 3
-}
-
-enum McarDir {
-    //% block="forward"
-    FW = 1,
-    //% block="backward"
-    BW = 2
-}
-
-enum McarTurn {
-    //%block="left"
-    Left = 0,
-    //%block="right"
-    Right = 1,
-}
-
-enum McarServoIndex {
-    //% block="S1"
-    S1 = 1,
-    //% block="S2"
-    S2 = 2,
-    //% block="S3"
-    S3 = 3
-}
-
-enum McarRGBLight {
-    //%block="left headlight"
-    RGBL = 2,
-    //%block="right headlight"
-    RGBR = 1,
-    //%block="all headlights"
-    RGBA = 3
-}
-
-enum TrackbitStateType {
-    //% block="◌ ◌ ◌" 
-    Tracking_State_0 = 7,
-    //% block="◌ ◌ ●" 
-    Tracking_State_1 = 6,
-    //% block="◌ ● ◌" 
-    Tracking_State_2 = 5,
-    //% block="◌ ● ●" 
-    Tracking_State_3 = 4,
-
-
-    //% block="● ◌ ◌" 
-    Tracking_State_4 = 3,
-    //% block="● ◌ ●" 
-    Tracking_State_5 = 2,
-    //% block="● ● ◌" 
-    Tracking_State_6 = 1,
-    //% block="● ● ●" 
-    Tracking_State_7 = 0
-}
-
-enum TrackbitType {
-    //% block="●"
-    State_0 = 0,
-    //% block="◌"
-    State_1 = 1
-}
-enum TrackbitChannel {
-    //% block="left"
-    Three = 3,
-    //% block="centre"
-    Two = 2,
-    //% block="right"
-    One = 1
-}
-
-enum ServoType {
-    //% block="90°"
-    Servo90 = 1,
-    //% block="180°"
-    Servo180 = 2,
-    //% block="270°"
-    Servo270 = 3
-}
-
-enum SonarUnit {
-    //% block="cm"
-    Centimeters,
-    //% block="inches"
-    Inches
-}
-
-const enum McarIRButtons {
-    //% block="1"
-    Number_1 = 0x45,
-    //% block="2"
-    Number_2 = 0x46,
-    //% block="3"
-    Number_3 = 0x47,
-    //% block="4"
-    Number_4 = 0x44,
-    //% block="5"
-    Number_5 = 0x40,
-    //% block="6"
-    Number_6 = 0x43,
-    //% block="7"
-    Number_7 = 0x07,
-    //% block="8"
-    Number_8 = 0x15,
-    //% block="9"
-    Number_9 = 0x09,
-    //% block="*"
-    Star = 0x16,
-    //% block="0"
-    Number_0 = 0x19,
-    //% block="#"
-    Hash = 0x0d,
-    //% block=" "
-    Unused_1 = -1,
-    //% block="▲"
-    Up = 0x18,
-    //% block=" "
-    Unused_2 = -2,
-    //% block="◀"
-    Left = 0x08,
-    //% block="OK"
-    OK = 0x1c,
-    //% block="▶"
-    Right = 0x5a,
-    //% block=" "
-    Unused_3 = -3,
-    //% block="▼"
-    Down = 0x52,
-    //% block=" "
-    Unused_4 = -4
-}
-
-enum BatteryType {
-    //% block="3 AA batteries"
-    AA = 1,
-    //% block="1 lithium battery"
-    LithiumBattery
-}
-
-enum Textview {
-    //%block="left"
-    Left = 0,
-    //%block="right"
-    Right = 1,
-}
-
-enum AppButton {
-    //%block="F-pressed"
-    F1 = 0,
-    //%block="F-release"
-    F0 = 1,
-    //%block="OK-pressed"
-    OK1 = 2,
-    //%block="OK-release"
-    OK0 = 3,
-    //%block="B-pressed"
-    B1 = 4,
-    //%block="B-release"
-    B0 = 5,
-    //%block="L-pressed"
-    L1 = 6,
-    //%block="L-release"
-    L0 = 7,
-    //%block="R-pressed"
-    R1 = 8,
-    //%block="R-release"
-    R0 = 9,
-    //%block="1-pressed"
-    ONE1 = 10,
-    //%block="1-release"
-    ONE0 = 11,
-    //%block="2-pressed"
-    TWO1 = 12,
-    //%block="2-release"
-    TWO0 = 13,
-    //%block="3-pressed"
-    THREE1 = 14,
-    //%block="3-release"
-    THREE0 = 15
-}
 
 //% weight=10 color=#008C8C block="mCar" blockId="mCar" icon="\uf48b"
 namespace mCar {
+    export enum WheelDir {
+        //%block="forward"
+        FW = 1,
+        //%block="backward"
+        BW = 2,
+    }
+
+    export enum McarWheels {
+        //%block="left wheel"
+        LeftWheel = 1,
+        //%block="right wheel"
+        RightWheel = 2,
+        //%block="all wheels"
+        AllWheel = 3
+    }
+
+    export enum McarDir {
+        //% block="forward"
+        FW = 1,
+        //% block="backward"
+        BW = 2
+    }
+
+    export enum McarTurn {
+        //%block="left"
+        Left = 0,
+        //%block="right"
+        Right = 1,
+    }
+
+    export enum McarServoIndex {
+        //% block="S1"
+        S1 = 1,
+        //% block="S2"
+        S2 = 2,
+        //% block="S3"
+        S3 = 3
+    }
+
+    export enum McarRGBLight {
+        //%block="left headlight"
+        RGBL = 2,
+        //%block="right headlight"
+        RGBR = 1,
+        //%block="all headlights"
+        RGBA = 3
+    }
+
+    export enum TrackbitStateType {
+        //% block="◌ ◌ ◌" 
+        TrackingState0 = 7,
+        //% block="◌ ◌ ●" 
+        TrackingState1 = 6,
+        //% block="◌ ● ◌" 
+        TrackingState2 = 5,
+        //% block="◌ ● ●" 
+        TrackingState3 = 4,
+
+
+        //% block="● ◌ ◌" 
+        TrackingState4 = 3,
+        //% block="● ◌ ●" 
+        TrackingState5 = 2,
+        //% block="● ● ◌" 
+        TrackingState6 = 1,
+        //% block="● ● ●" 
+        TrackingState7 = 0
+    }
+
+    export enum TrackbitType {
+        //% block="●"
+        State0 = 0,
+        //% block="◌"
+        State1 = 1
+    }
+    export enum TrackbitChannel {
+        //% block="left"
+        Three = 3,
+        //% block="centre"
+        Two = 2,
+        //% block="right"
+        One = 1
+    }
+
+    export enum ServoType {
+        //% block="90°"
+        Servo90 = 1,
+        //% block="180°"
+        Servo180 = 2,
+        //% block="270°"
+        Servo270 = 3
+    }
+
+    export enum SonarUnit {
+        //% block="cm"
+        Centimeters,
+        //% block="inches"
+        Inches
+    }
+
+    export enum McarIRButtons {
+        //% block="1"
+        Number1 = 0x45,
+        //% block="2"
+        Number2 = 0x46,
+        //% block="3"
+        Number3 = 0x47,
+        //% block="4"
+        Number4 = 0x44,
+        //% block="5"
+        Number5 = 0x40,
+        //% block="6"
+        Number6 = 0x43,
+        //% block="7"
+        Number7 = 0x07,
+        //% block="8"
+        Number8 = 0x15,
+        //% block="9"
+        Number9 = 0x09,
+        //% block="*"
+        Star = 0x16,
+        //% block="0"
+        Number0 = 0x19,
+        //% block="#"
+        Hash = 0x0d,
+        //% block=" "
+        Unused1 = -1,
+        //% block="▲"
+        Up = 0x18,
+        //% block=" "
+        Unused2 = -2,
+        //% block="◀"
+        Left = 0x08,
+        //% block="OK"
+        OK = 0x1c,
+        //% block="▶"
+        Right = 0x5a,
+        //% block=" "
+        Unused3 = -3,
+        //% block="▼"
+        Down = 0x52,
+        //% block=" "
+        Unused4 = -4
+    }
+
+    export enum BatteryType {
+        //% block="3 AA batteries"
+        AA = 1,
+        //% block="1 lithium battery"
+        LithiumBattery
+    }
+
+    export enum Textview {
+        //%block="left"
+        Left = 0,
+        //%block="right"
+        Right = 1,
+    }
+
+    export enum AppButton {
+        //%block="F-pressed"
+        F1 = 0,
+        //%block="F-release"
+        F0 = 1,
+        //%block="OK-pressed"
+        OK1 = 2,
+        //%block="OK-release"
+        OK0 = 3,
+        //%block="B-pressed"
+        B1 = 4,
+        //%block="B-release"
+        B0 = 5,
+        //%block="L-pressed"
+        L1 = 6,
+        //%block="L-release"
+        L0 = 7,
+        //%block="R-pressed"
+        R1 = 8,
+        //%block="R-release"
+        R0 = 9,
+        //%block="1-pressed"
+        ONE1 = 10,
+        //%block="1-release"
+        ONE0 = 11,
+        //%block="2-pressed"
+        TWO1 = 12,
+        //%block="2-release"
+        TWO0 = 13,
+        //%block="3-pressed"
+        THREE1 = 14,
+        //%block="3-release"
+        THREE0 = 15
+    }
+    
     let IR_Val = 0
     let leftWheelSpeed = 0
     let rightWheelSpeed = 0
@@ -215,9 +216,9 @@ namespace mCar {
 
     /**
     * Set the speed and direction of the wheels
-    * @param wheel: The wheels of mCar.
-    * @param direction: The wheel goes forward or backward.
-    * @param speed: The speed at which the wheels turn, eg: 0--100
+    * @param wheel - The wheels of mCar.
+    * @param direction - The wheel goes forward or backward.
+    * @param speed - The speed at which the wheels turn. eg: 0--100
     */
     //% group="Wheels"
     //% block="set %wheel %direction speed %speed\\%"
@@ -249,8 +250,8 @@ namespace mCar {
 
     /**
      * Set the speed and direction of the wheel.
-     * @param leftSpeed: Set the speed and direction of the left wheel. 
-     * @param rightSpeed: Set the speed and direction of the right wheel. 
+     * @param leftSpeed - Set the speed and direction of the left wheel. 
+     * @param rightSpeed - Set the speed and direction of the right wheel. 
      */
     //% group="Wheels"
     //% block="set left wheel speed %leftSpeed\\% right wheel speed %rightSpeed\\%"
@@ -284,7 +285,7 @@ namespace mCar {
 
     /** 
      * Wheels stop.
-     * @param wheel: The wheels of mCar.
+     * @param wheel - The wheels of mCar.
      */
     //% group="Wheels"
     //% weight=370
@@ -311,8 +312,8 @@ namespace mCar {
      * Wheels speed calibration.
      * When the speed of the left and right wheels of the mCar trolley is not consistent,
      * this function can adjust the speed of the wheel and save it permanently.
-     * @param offset1: left Wheel offset, eg: -10--0
-     * @param offset1: right Wheel offset, eg: -10--0
+     * @param offset1 - Left Wheel offset. eg: -10--0
+     * @param offset1 - Right Wheel offset. eg: -10--0
      */
     //% group="Wheels"
     //% weight=360
@@ -338,12 +339,12 @@ namespace mCar {
 
     /**
      * Set car direction.
-     * @param direction: The direction of the mCar runs.
-     * @param speed: The speed at which mCar runs.
+     * @param direction - The direction of the mCar runs.
+     * @param speed - The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=340
-    //%block="car go %direction Speed %speed\\%"
+    //%block="car go %direction speed %speed\\%"
     //% speed.min=0 speed.max=100
     export function carDirectionSpeed(direction: McarDir, speed: number): void {
         leftWheelSpeed = speed;
@@ -361,13 +362,13 @@ namespace mCar {
 
     /**
      * Car turn.
-     * @param direction: The direction of the mCar runs.
-     * @param percent: Control the Angle at which the mCar turns.
-     * @param speed: The speed at which mCar runs.
+     * @param direction - The direction of the mCar runs.
+     * @param percent - Control the Angle at which the mCar turns.
+     * @param speed - The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=320
-    //%block="car turn %direction Turn rate %percent\\% Speed %speed\\%"
+    //%block="car turn %direction Turn rate %percent\\% speed %speed\\%"
     //% percent.min=0 percent.max=100
     //% speed.min=0 speed.max=100
     export function carTurn(direction: McarTurn, percent: number, speed: number): void {
@@ -390,12 +391,12 @@ namespace mCar {
 
     /**
      * Car turn at place.
-     * @param direction: The direction of the mCar runs.
-     * @param speed: The speed at which mCar runs.
+     * @param direction - The direction of the mCar runs.
+     * @param speed - The speed at which mCar runs.
      */
     //% group="Car"
     //% weight=320
-    //%block="car turn %direction at place Speed %speed\\%"
+    //%block="car turn %direction at place speed %speed\\%"
     //% speed.min=0 speed.max=100
     export function carTurnPlace(direction: McarTurn, speed: number): void {
         leftWheelSpeed = speed;
@@ -424,8 +425,8 @@ namespace mCar {
 
     /**
     * Set LED headlights.
-    * @param light: Choose which headlights to use.
-    * @param color: Colors to light up.
+    * @param light - Choose which headlights to use.
+    * @param color - Colors to light up.
     */
     //% group="RGB LED headlights"
     //% block="set %light color: $color"
@@ -465,9 +466,9 @@ namespace mCar {
 
     /**
     * Select a headlight and set the RGB color.
-    * @param r: red color value of RGB color, eg: 0
-    * @param g: green color value of RGB color, eg: 128
-    * @param b: blue color value of RGB color, eg: 255
+    * @param r - Red color value of RGB color. eg: 0
+    * @param g - Green color value of RGB color. eg: 128
+    * @param b - Blue color value of RGB color. eg: 255
     */
     //% group="RGB LED headlights"
     //% inlineInputMode=inline
@@ -583,7 +584,7 @@ namespace mCar {
     //% weight=240
     //% block="%channel tracking sensor state is %state"
     export function trackbitChannelState(channel: TrackbitChannel, state: TrackbitType): boolean {
-        if (state == TrackbitType.State_1)
+        if (state == TrackbitType.State1)
             if (threeWayStateValue & (1 << (channel - 1))) {
                 return true
             }
@@ -646,7 +647,6 @@ namespace mCar {
     export function irCallBack(handler: () => void) {  
         //handler is the functional argument to the irCallback function and is the block
         //to be executed inside the irCallback function generation block.
-        //(handler是irCallback函数的函数型参数，也是irCallback函数生成语块里面要执行的语块。)
         pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
         //A trigger event is registered, and handler is the function to execute to trigger the event.
         control.onEvent(98, 3500, handler)             
@@ -695,9 +695,9 @@ namespace mCar {
     /**
      * Servo control module, used for 90, 180, 270 degrees servo.
      * When the S1--S3 ports of mCar are connected to the servo, this function can control the servo.
-     * @param servoType: Servo type, eg: 90, 180, 270
-     * @param index: Servo interface on mCar, eg: S1, S2, S2
-     * @param angle: The Angle of rotation of the servo.
+     * @param servoType - Servo type, eg: 90, 180, 270
+     * @param index - Servo interface on mCar, eg: S1, S2, S2
+     * @param angle - The Angle of rotation of the servo.
      */
     //% group="Expansion port"
     //% weight=120
@@ -730,8 +730,8 @@ namespace mCar {
 
     /**
      * The steering gear rotates continuously, and is used for the steering gear of 360 degrees rotation.
-     * @param index: Servo interface on mCar, eg: S1, S2, S2
-     * @param speed: The speed at which the servo rotates.
+     * @param index - Servo interface on mCar, eg: S1, S2, S2
+     * @param speed - The speed at which the servo rotates.
      */
     //% group="Expansion port"
     //% weight=110
@@ -745,7 +745,7 @@ namespace mCar {
 
     /**
      * Sets the battery type and returns the battery level.
-     * @param batType: Type of battery. eg: 3 AA battery, 1 lithium battery
+     * @param batType - Type of battery. eg: 3 AA battery, 1 lithium battery
      * Return 0--100
      */
     //% group="Battery"
@@ -769,8 +769,8 @@ namespace mCar {
 
     /**
      * Send a string to the left and right text fields of the APP.
-     * @param side：Text display box. eg: left, right
-     * @param str：The string to display.
+     * @param side - Text display box. eg: left, right
+     * @param str - The string to display.
      */
     //% group="APP command"
     //% weight=91
@@ -807,8 +807,8 @@ namespace mCar {
 
     /**
      * Check the buttons on the App.
-     * @param myButton: Bluetooth serial port reads APP string instructions.
-     * @param button: State of the button on the APP.
+     * @param myButton - Bluetooth serial port reads APP string instructions.
+     * @param button - State of the button on the APP.
      */
     //% group="APP command"
     //% weight=90
@@ -824,7 +824,7 @@ namespace mCar {
 
     /**
      * Read the firmware version of the chip on the mCar.
-     * Returns a string, eg："Vx"
+     * Returns a string. eg："Vx"
      */
     //% group="Others"
     //% weight=1

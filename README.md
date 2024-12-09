@@ -10,10 +10,7 @@ This library is designed to drive mCar, You can get mCar here.
 Product Tutorial: 
 
 [Github](https://github.com/siyeenove/M1C0000)   
-[Github PDF](https://github.com/siyeenove/M1C0000/blob/main/mCar%20Tutorial%20-%20English.pdf)  
-
-Please ignore security warnings, because this is an "http" URL!  
-[Official website Tutorial](http://siyeenove.com/tutorial)
+[Github PDF](https://siyeenove.github.io/M1C0000/mCar%20Tutorial%20-%20English.pdf)  
 
 ## Code Example
 ```JavaScript
