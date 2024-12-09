@@ -368,7 +368,7 @@ namespace mCar {
      */
     //% group="Car"
     //% weight=320
-    //%block="car turn %direction Turn rate %percent\\% speed %speed\\%"
+    //%block="car turn %direction turn rate %percent\\% speed %speed\\%"
     //% percent.min=0 percent.max=100
     //% speed.min=0 speed.max=100
     export function carTurn(direction: McarTurn, percent: number, speed: number): void {
