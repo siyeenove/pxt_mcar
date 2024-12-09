@@ -14,40 +14,125 @@ Product Tutorial:
 
 ## Code Example
 ```JavaScript
+//mCar ran forward at full speed.
+mCar.setWheelDirectionSpeed(mCar.McarWheels.LeftWheel, mCar.WheelDir.FW, 100)
 
-// Process the received data in an infinite loop function.
+//Set the speed and direction of the left and right wheels of the mCar. 
+mCar.setWheelSpeed(-100, 100)
+
+//Set mCar left and right wheels to stop.
+mCar.wheelStop(mCar.McarWheels.AllWheel)
+
+//Wheels speed calibration.
+//When the speed of the left and right wheels of the mCar trolley is not consistent,
+//this function can adjust the speed of the wheel and save it permanently.
+mCar.wheelsAdjustment(0, 0) 
+
+//mCar ran forward at full speed.
+mCar.carDirectionSpeed(mCar.McarDir.FW, 100)
+
+//Set mCar to turn left at full speed.
+mCar.carTurnPlace(mCar.McarTurn.Left, 100)
+
+//Set mCar to turn left at full speed at 50% turn rate.
+mCar.carTurn(mCar.McarTurn.Left, 50, 100)
+
+//mCar stop.
+mCar.carStop()
+
+//Set mCar two headlights on red.
+mCar.rgbLight(mCar.McarRGBLight.RGBA, 0xff0000)  
+
+//Set mCar two headlights on blue.
+mCar.singleHeadlights(mCar.McarRGBLight.RGBA, 0, 0, 255)
+
+//Set mCar two headlights off.
+mCar.turnOffAllHeadlights()
+
+//Read and display the value of the 3-way grayscale sensor.
+basic.forever(function () {
+    mCar.trackbitStateValue()
+    if (mCar.readGrayscaleSensorState(mCar.TrackbitStateType.TrackingState0)) {
+        basic.showNumber(mCar.returnGrayscaleSensorValue())
+    } else if (mCar.trackbitChannelState(mCar.TrackbitChannel.Three, mCar.TrackbitType.State0)) {
+        basic.showNumber(mCar.returnGrayscaleSensorValue())
+    }
+})
+
+//Read and display the value of the Sonar.
+basic.forever(function () {
+    basic.showNumber(mCar.ultrasonic(mCar.SonarUnit.Centimeters))
+    basic.pause(500)
+})
+
+//Read and display the value of the "OK" key of the infrared remote control.
 mCar.irCallBack(function () {
-    // mCar performs different actions based on IR commands.
-    if (mCar.irButton(mCar.McarIRButtons.Up)) {
-        // mCar goes forward at a speed of 100.
-        mCar.carDirectionSpeed(mCar.McarDir.FW, 100)
-    }
-    if (mCar.irButton(mCar.McarIRButtons.Down)) {
-        // mCar goes backward at a speed of 100.
-        mCar.carDirectionSpeed(mCar.McarDir.BW, 100)
-    }
-    if (mCar.irButton(mCar.McarIRButtons.Left)) {
-        // The mCar is turning left at a speed of 100 with a turn rate of 50.
-        mCar.carTurn(mCar.McarTurn.Left, 50, 100)
-    }
-    if (mCar.irButton(mCar.McarIRButtons.Right)) {
-        // The mCar is turning right at a speed of 100 with a turn rate of 50.
-        mCar.carTurn(mCar.McarTurn.Right, 50, 100)
-    }
     if (mCar.irButton(mCar.McarIRButtons.OK)) {
-        // mCar stop
-        mCar.carStop()
-    }
-    if (mCar.irValue() != 0) {
-        // micro:bit 8 x 8 dot matrix Displays command values.
         basic.showNumber(mCar.irValue())
     }
 })
-// Set the calibration values of both mCar motors to 0.
-mCar.wheelsAdjustment(0, 0)
-basic.pause(1000)
+
+//Set the 180-degree servo of S1 port to turn 0-180 degrees.
+basic.forever(function () {
+    mCar.extendServoControl(mCar.McarServoIndex.S1, mCar.ServoType.Servo180, 0)
+    basic.pause(1000)
+    mCar.extendServoControl(mCar.McarServoIndex.S1, mCar.ServoType.Servo180, 180)
+    basic.pause(1000)
+})
+
+//Set the 360-degree servo at S1 port to turn clockwise and counterclockwise.
+basic.forever(function () {
+    mCar.continuousServoControl(mCar.McarServoIndex.S1, -100)
+    basic.pause(1000)
+    mCar.continuousServoControl(mCar.McarServoIndex.S1, 100)
+    basic.pause(1000)
+})
+
+//Set mCar external 3 AA batteries, and infinite loop display power level.
+basic.showNumber(mCar.batteryLevel(mCar.BatteryType.AA))
+basic.forever(function () {
+    basic.pause(1000)
+    basic.showNumber(mCar.batteryLevel(mCar.BatteryType.AA))
+})
+
+//Send a string to the left and right text fields of the APP via Bluetooth serial port.
+bluetooth.onBluetoothConnected(function () {
+    basic.showIcon(IconNames.Happy)
+    while (true) {
+        bluetooth.uartWriteString(mCar.display(mCar.Textview.Left, ""))
+        basic.pause(1000)
+    }
+})
+bluetooth.onBluetoothDisconnected(function () {
+    basic.showIcon(IconNames.Sad)
+})
 basic.forever(function () {
 	
+})
+
+//Check whether the character received by the Bluetooth serial port is the instruction of the APP.
+let data = ""
+bluetooth.onBluetoothConnected(function () {
+    basic.showIcon(IconNames.Happy)
+    while (true) {
+        data = bluetooth.uartReadUntil(serial.delimiters(Delimiters.Hash))
+        if (mCar.appButton(data, mCar.AppButton.F1)) {
+            basic.showIcon(IconNames.Heart)
+            basic.pause(1000)
+        }
+    }
+})
+bluetooth.onBluetoothDisconnected(function () {
+    basic.showIcon(IconNames.Sad)
+})
+basic.forever(function () {
+	
+})
+
+//Read the firmware version of the chip on the mCar.
+basic.forever(function () {
+    basic.showString(mCar.readVersions())
+    basic.pause(1000)
 })
 
 ```

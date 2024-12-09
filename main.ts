@@ -768,7 +768,7 @@ namespace mCar {
 
 
     /**
-     * Send a string to the left and right text fields of the APP.
+     * Send a string to the left and right text fields of the APP via Bluetooth serial port.
      * @param side - Text display box. eg: left, right
      * @param str - The string to display.
      */
