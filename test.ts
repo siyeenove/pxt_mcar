@@ -48,7 +48,7 @@ basic.forever(function () {
         basic.showIcon(IconNames.Yes)
         basic.pause(1000)
     }
-    basic.showNumber(mCar.ultrasonic(mCar.SonarUnit.Centimeters))
+    basic.showNumber(mCar.sonar(mCar.SonarUnit.Centimeters))
     basic.pause(1000)
     mCar.extendServoControl(mCar.McarServoIndex.S1, mCar.ServoType.Servo180, 180)
 })

@@ -218,11 +218,12 @@ namespace mCar {
     * Set the speed and direction of the wheels
     * @param wheel - The wheels of mCar.
     * @param direction - The wheel goes forward or backward.
-    * @param speed - The speed at which the wheels turn. eg: 0--100
+    * @param speed - The speed at which the wheels turn. eg: 0 to 100
     */
     //% group="Wheels"
     //% block="set %wheel %direction speed %speed\\%"
     //% speed.min=0 speed.max=100
+    //% speed.defl=0
     //% weight=380
     export function setWheelDirectionSpeed(wheel: McarWheels, direction: WheelDir, speed: number): void {
         let i2cBuffer = pins.createBuffer(2)
@@ -312,14 +313,15 @@ namespace mCar {
      * Wheels speed calibration.
      * When the speed of the left and right wheels of the mCar trolley is not consistent,
      * this function can adjust the speed of the wheel and save it permanently.
-     * @param offset1 - Left Wheel offset. eg: -10--0
-     * @param offset1 - Right Wheel offset. eg: -10--0
+     * @param offset1 - Left Wheel offset. eg: -10 to 0
+     * @param offset1 - Right Wheel offset. eg: -10 to 0
      */
     //% group="Wheels"
     //% weight=360
     //%block="wheels speed offset: left wheel %offset1 right wheel %offset2"
     //% offset1.min=-10 offset1.max=0
     //% offset2.min=-10 offset2.max=0
+    //% offset1.defl=0 offset2.defl=0
     export function wheelsAdjustment(offset1: number, offset2: number): void {
         let buffer = pins.createBuffer(2)
         offset1 = Math.map(offset1, -10, 0, 10, 0);
@@ -476,6 +478,7 @@ namespace mCar {
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
+    //% r.defl=0 g.defl=0 b.defl=0
     //% weight=290
     export function singleHeadlights(light: McarRGBLight, r: number, g: number, b: number): void {
         let buf = pins.createBuffer(2);
@@ -607,9 +610,9 @@ namespace mCar {
       * Returns the distance value measured by the ultrasonic module, eg: Centimeters, Inch
       */
     //% group="Sonar sensor"
-    //% blockId=ultrasonic block="sonar distance %unit"
+    //% block="sonar distance %unit"
     //% weight=220
-    export function ultrasonic(unit: SonarUnit, maxCmDistance = 500): number {
+    export function sonar(unit: SonarUnit, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(DigitalPin.P13, PinPullMode.PullNone);
         pins.digitalWritePin(DigitalPin.P13, 0);
@@ -695,13 +698,14 @@ namespace mCar {
     /**
      * Servo control module, used for 90, 180, 270 degrees servo.
      * When the S1--S3 ports of mCar are connected to the servo, this function can control the servo.
-     * @param servoType - Servo type, eg: 90, 180, 270
      * @param index - Servo interface on mCar, eg: S1, S2, S2
+     * @param servoType - Servo type, eg: 90, 180, 270
      * @param angle - The Angle of rotation of the servo.
      */
     //% group="Expansion port"
     //% weight=120
     //% block="set %index %servoType servo angle to %angle°"
+    //% index.defl=mCar.McarServoIndex.S1 servoType.defl=mCar.ServoType.Servo90
     export function extendServoControl(index: McarServoIndex, servoType: ServoType, angle: number): void {
         let angleMap: number
         if (servoType == ServoType.Servo90) {
@@ -737,6 +741,7 @@ namespace mCar {
     //% weight=110
     //% block="set %index 360° servo speed to %speed\\%"
     //% speed.min=-100 speed.max=100
+    //% index.defl=mCar.McarServoIndex.S1
     export function continuousServoControl(index: McarServoIndex, speed: number): void {
         speed = Math.map(speed, -100, 100, 0, 180)
         extendServoControl(index, ServoType.Servo180, speed)
@@ -746,11 +751,12 @@ namespace mCar {
     /**
      * Sets the battery type and returns the battery level.
      * @param batType - Type of battery. eg: 3 AA battery, 1 lithium battery
-     * Return 0--100
+     * Return 0 to 100
      */
     //% group="Battery"
     //% weight=100
     //% block="battery level: %batType"
+    //% batType.defl=mCar.BatteryType.AA
     export function batteryLevel(batType: BatteryType) : number {
         let i2cBuffer = pins.createBuffer(1);
         if (batType == BatteryType.AA)
@@ -775,6 +781,7 @@ namespace mCar {
     //% group="APP command"
     //% weight=91
     //% block="%side textview display %str"
+    //% side.defl=mCar.Textview.Left
     export function display(side: Textview, str: string): string {
         let strCmd;
         if (side == Textview.Left){

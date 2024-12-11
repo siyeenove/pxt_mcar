@@ -1,7 +1,7 @@
 {
     "name": "pxt-mcar",
-    "version": "1.1.1",
-    "description": "mCar robot designed by Siyeenove",
+    "version": "1.1.2",
+    "description": "mCar robot designed by Siyeenove - beta",
     "license": "MIT",
     "dependencies": {
         "core": "*"
