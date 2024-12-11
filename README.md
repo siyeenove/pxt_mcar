@@ -85,7 +85,7 @@ basic.forever(function () {
 ```JavaScript
 //Read and display the value of the Sonar.
 basic.forever(function () {
-    basic.showNumber(mCar.ultrasonic(mCar.SonarUnit.Centimeters))
+    basic.showNumber(mCar.sonar(mCar.SonarUnit.Centimeters))
     basic.pause(500)
 })
 ```
