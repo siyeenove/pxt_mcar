@@ -709,15 +709,15 @@ namespace mCar {
     export function extendServoControl(index: McarServoIndex, servoType: ServoType, angle: number): void {
         let angleMap: number
         if (servoType == ServoType.Servo90) {
-            angleMap = Math.map(angle, 0, 90, 50, 200);
+            angleMap = Math.map(angle, 0, 90, 50, 250);
         }
 
         if (servoType == ServoType.Servo180) {
-            angleMap = Math.map(angle, 0, 180, 50, 200);
+            angleMap = Math.map(angle, 0, 180, 50, 250);
         }
 
         if (servoType == ServoType.Servo270) {
-            angleMap = Math.map(angle, 0, 270, 50, 200);
+            angleMap = Math.map(angle, 0, 270, 50, 250);
         }
 
         let buf = pins.createBuffer(2)
