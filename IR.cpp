@@ -12,12 +12,12 @@ int logic_value(){                       //A function to read the logical values
     uint32_t nowtime;
     while(!uBit.io.P9.getDigitalValue());                           //Wait for the low level
     nowtime = system_timer_current_time_us();
-    if((nowtime - lasttime) > 400 && (nowtime - lasttime) < 700){   //low level 560us
+    if((nowtime - lasttime) > 350 && (nowtime - lasttime) < 850){   //low level 560us
         while(uBit.io.P9.getDigitalValue());                        //high level, wait
         lasttime = system_timer_current_time_us();
-        if((lasttime - nowtime)>400 && (lasttime - nowtime) < 700){ //low level 560us
+        if((lasttime - nowtime)>350 && (lasttime - nowtime) < 850){ //low level 560us
             return 0;
-        }else if((lasttime - nowtime)>1500 && (lasttime - nowtime) < 1800){//high leve 1.7ms
+        }else if((lasttime - nowtime)>1350 && (lasttime - nowtime) < 1950){//high leve 1.7ms
             return 1;
        }
     }
@@ -54,7 +54,7 @@ void remote_decode(void){
     while(uBit.io.P9.getDigitalValue()){//high level, wait
         nowtime = system_timer_current_time_us();
         if((nowtime - lasttime) > 100000){//More than 100 milliseconds, indicating that no key was pressed.
-            ir_code = 0xff00;
+            ir_code = 0xffff;
             return;
         }
     }

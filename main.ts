@@ -650,15 +650,13 @@ namespace mCar {
     export function irCallBack(handler: () => void) {  
         //handler is the functional argument to the irCallback function and is the block
         //to be executed inside the irCallback function generation block.
-        pins.setPull(DigitalPin.P9, PinPullMode.PullUp)
-        //A trigger event is registered, and handler is the function to execute to trigger the event.
-        control.onEvent(98, 3500, handler)             
+        pins.setPull(DigitalPin.P9, PinPullMode.PullUp)          
         control.inBackground(() => {
             while (true) {
+                // IR_Val = 8-bit command + 8-bit command inverse code
                 IR_Val = irCode()
-                if (IR_Val != 0xff00) {
-                    //Fires the event registered above（control.onEvent（））
-                    control.raiseEvent(98, 3500, EventCreationMode.CreateAndFire) 
+                if (IR_Val > 0xff) {
+                    handler()
                 }
                 basic.pause(20)
             }
